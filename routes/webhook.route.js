@@ -210,7 +210,7 @@ function handlePostback(senderPsid, receivedPostback) {
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": 'Chon cach de xem them',
+              "text": text,
               "buttons": [
                 // {
                 //   "type": "web_url",
