@@ -133,6 +133,52 @@ function handlePostback(senderPsid, receivedPostback) {
         }
       }
       break;
+    case 'WEB_CATEGORY_ID':
+      response = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "button",
+            "text": 'Lập trình Web',
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Khoa hoc thu 1",
+                "payload": "COURSE_ID_1"
+              },
+              {
+                "type": "postback",
+                "title": "Khoa hoc thu 2",
+                "payload": "COURSE_ID_2"
+              }
+            ]
+          }
+        }
+      }
+      break;
+    case 'MOBILE_CATEGORY_ID':
+      response = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "button",
+            "text": 'Lập trình thiết bị di động',
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Khoa hoc thu 3",
+                "payload": "COURSE_ID_3"
+              },
+              {
+                "type": "postback",
+                "title": "Khoa hoc thu 4",
+                "payload": "COURSE_ID_4"
+              }
+            ]
+          }
+        }
+      }
+      break;
   }
   // Send the message to acknowledge the postback
   callSendAPI(senderPsid, response);
