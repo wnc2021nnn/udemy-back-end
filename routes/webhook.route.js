@@ -227,10 +227,11 @@ function handlePostback(senderPsid, receivedPostback) {
         Master creating Augmented Reality apps using Apple’s new ARKit
         Create apps that use Machine Learning using Apple’s new CoreML
         Master app design so you'll know how to wireframe, mockup and prototype your app idea`;
-
-        callSendAPI(senderPsid, {
+        let textRP = {
           "text": text
-        });
+        }; 
+        
+        callSendAPI(senderPsid, textRP);
 
         response = {
           "attachment": {
