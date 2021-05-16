@@ -1,6 +1,7 @@
 // https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup
 
 const express = require('express');
+const facebookConfig = require('../config/facebook.config.json');
 
 const router = express.Router();
 
@@ -48,7 +49,7 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>"
+  let VERIFY_TOKEN = facebookConfig.VERIFY_TOKEN
 
   // Parse the query params
   let mode = req.query['hub.mode'];
