@@ -5,10 +5,18 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   app = express(); // creates express http server
+  morgan = require('morgan');
 
 app.use(express.json());
+app.use(morgan('dev'));
 
-const PORT = process.env.PORT || 1337;
+const PORT = process.env.PORT || 5000;
+
+app.get('/', function (req, res) {
+  res.json({
+    message: 'Hello from WNC 2021 NNN Udemy API'
+  });
+})
 
 app.use('/api/webhook', require('./routes/webhook.route'))
 
