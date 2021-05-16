@@ -204,31 +204,31 @@ function handlePostback(senderPsid, receivedPostback) {
       if (payload.includes('COURSE_ID_')) {
         text = `iOS & Swift - The Complete iOS App Development Bootcamp
         From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!`;
-
+        // 'text': text,
         response = {
-          'text': text
+          "attachment": {
+            "type": "template",
+            "payload": {
+              "template_type": "button",
+              "text": 'Chon cach de xem them',
+              "buttons": [
+                // {
+                //   "type": "web_url",
+                //   "title": "Xem them",
+                //   "url": "https://wnc2021be.herokuapp.com/",
+                //   "webview_height_ratio": "tall"
+                // },
+                {
+                  "type": "web_url",
+                  "title": "Di den trang web",
+                  "url": "https://wnc2021be.herokuapp.com/",
+                  "webview_height_ratio": "full"
+                },
+              ]
+            }
+          }
         };
-        // "attachment": {
-        //   "type": "template",
-        //   "payload": {
-        //     "template_type": "button",
-        //     "text": 'Chon cach de xem them',
-        //     "buttons": [
-        //       {
-        //         "type": "web_url",
-        //         "title": "Xem them",
-        //         "url": "https://wnc2021be.herokuapp.com/",
-        //         "webview_height_ratio": "tall"
-        //       },
-        //       {
-        //         "type": "web_url",
-        //         "title": "Di den trang web",
-        //         "url": "https://wnc2021be.herokuapp.com/",
-        //         "webview_height_ratio": "full"
-        //       },
-        //     ]
-        //   }
-        // }
+
       }
   }
   // Send the message to acknowledge the postback
