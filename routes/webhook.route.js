@@ -110,7 +110,10 @@ function handlePostback(senderPsid, receivedPostback) {
     case 'no':
       response = { 'text': 'Oops, try sending another image.' };
       break;
-    case 'VIEW_COURSES_BY_CATEGORY':
+    case 'SEARCH_COURSES_BUTTON':
+      response = { 'text': 'Nhập từ khóa để tìm kiếm' };
+      break;
+    case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
       response = {
         "attachment": {
           "type": "template",
