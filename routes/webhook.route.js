@@ -232,10 +232,9 @@ function handlePostback(senderPsid, receivedPostback) {
           "text": text
         }; 
 
-        // callSendAPI(senderPsid, textRP);
+        callSendAPI(senderPsid, textRP);
 
         response = {
-          "text": text,
           "attachment": {
             "type": "template",
             "payload": {
