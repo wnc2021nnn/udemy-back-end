@@ -203,7 +203,7 @@ function handlePostback(senderPsid, receivedPostback) {
       break;
     default:
       if (payload.includes('COURSE_ID_')) {
-        text = `iOS & Swift - The Complete iOS App Development Bootcamp Master app marketing so you can publish your apps and generate downloads From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!
+        let text = `iOS & Swift - The Complete iOS App Development Bootcamp Master app marketing so you can publish your apps and generate downloads From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!
         What you'll learn
         Be able to build any app you want
         Start your own app based business
@@ -227,10 +227,11 @@ function handlePostback(senderPsid, receivedPostback) {
         Master creating Augmented Reality apps using Apple’s new ARKit
         Create apps that use Machine Learning using Apple’s new CoreML
         Master app design so you'll know how to wireframe, mockup and prototype your app idea`;
+        
         let textRP = {
           "text": text
         }; 
-        
+
         callSendAPI(senderPsid, textRP);
 
         response = {
