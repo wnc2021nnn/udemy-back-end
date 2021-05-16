@@ -1,5 +1,6 @@
 // https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup
 
+const { text } = require('body-parser');
 const express = require('express');
 const request = require('request');
 const facebookConfig = require('../config/facebook.config.json');
@@ -211,10 +212,27 @@ function handlePostback(senderPsid, receivedPostback) {
         Learn to work with Apple's latest UI Framework - SwiftUI
         Master creating Augmented Reality apps using Apple’s new ARKit
         Create apps that use Machine Learning using Apple’s new CoreML
+        Be able to build any app you want
+        Start your own app based business
+        Create a portfolio of apps to apply for junior developer jobs at a technology company
+        Become a digital nomad by working as a freelance iOS developer
+        Learn to work with Apple's latest UI Framework - SwiftUI
+        Master creating Augmented Reality apps using Apple’s new ARKit
+        Create apps that use Machine Learning using Apple’s new CoreML
+        Be able to build any app you want
+        Start your own app based business
+        Create a portfolio of apps to apply for junior developer jobs at a technology company
+        Become a digital nomad by working as a freelance iOS developer
+        Learn to work with Apple's latest UI Framework - SwiftUI
+        Master creating Augmented Reality apps using Apple’s new ARKit
+        Create apps that use Machine Learning using Apple’s new CoreML
         Master app design so you'll know how to wireframe, mockup and prototype your app idea`;
 
+        callSendAPI(senderPsid, {
+          "text": text
+        });
+
         response = {
-          "text": text,
           "attachment": {
             "type": "template",
             "payload": {
