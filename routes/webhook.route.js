@@ -232,14 +232,14 @@ function handlePostback(senderPsid, receivedPostback) {
           "text": text
         }; 
 
-        // callSendAPI(senderPsid, textRP);
+        callSendAPI(senderPsid, textRP);
 
         response = {
           "attachment": {
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": text,
+              "text": "iOS & Swift - The Complete iOS App Development Bootcamp",
               "buttons": [
                 {
                   "type": "web_url",
