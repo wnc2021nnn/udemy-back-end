@@ -216,11 +216,12 @@ function handlePostback(senderPsid, receivedPostback) {
         36 sections • 541 lectures • 60h 24m total length
         `;
         response = {
+          'text': text,
           "attachment": {
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": text,
+              "text": 'Chon cach de xem them',
               "buttons": [
                 {
                   "type": "web_url",
