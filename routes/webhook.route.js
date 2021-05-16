@@ -203,7 +203,17 @@ function handlePostback(senderPsid, receivedPostback) {
     default:
       if (payload.includes('COURSE_ID_')) {
         text = `iOS & Swift - The Complete iOS App Development Bootcamp
-        From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!`;
+        From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!
+        What you'll learn
+        Be able to build any app you want
+        Start your own app based business
+        Create a portfolio of apps to apply for junior developer jobs at a technology company
+        Become a digital nomad by working as a freelance iOS developer
+        Learn to work with Apple's latest UI Framework - SwiftUI
+        Master creating Augmented Reality apps using Apple’s new ARKit
+        Create apps that use Machine Learning using Apple’s new CoreML
+        Master app design so you'll know how to wireframe, mockup and prototype your app idea
+        Master app marketing so you can publish your apps and generate downloads`;
         // 'text': text,
         response = {
           "attachment": {
@@ -212,12 +222,18 @@ function handlePostback(senderPsid, receivedPostback) {
               "template_type": "button",
               "text": text,
               "buttons": [
-                // {
-                //   "type": "web_url",
-                //   "title": "Xem them",
-                //   "url": "https://wnc2021be.herokuapp.com/",
-                //   "webview_height_ratio": "tall"
-                // },
+                {
+                  "type": "web_url",
+                  "title": "Xem them compact",
+                  "url": "https://wnc2021be.herokuapp.com/",
+                  "webview_height_ratio": "compact"
+                },
+                {
+                  "type": "web_url",
+                  "title": "Xem them",
+                  "url": "https://wnc2021be.herokuapp.com/",
+                  "webview_height_ratio": "tall"
+                },
                 {
                   "type": "web_url",
                   "title": "Di den trang web",
