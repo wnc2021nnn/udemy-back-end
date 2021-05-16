@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
   if (body.object === 'page') {
 
     // Iterates over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
+    body.entry.forEach(function (entry) {
 
       // Gets the body of the webhook event
       let webhookEvent = entry.messaging[0];
@@ -103,10 +103,34 @@ function handlePostback(senderPsid, receivedPostback) {
   let payload = receivedPostback.payload;
 
   // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { 'text': 'Thanks!' };
-  } else if (payload === 'no') {
-    response = { 'text': 'Oops, try sending another image.' };
+  switch (payload) {
+    case 'yes':
+      response = { 'text': 'Thanks!' };
+      break;
+    case 'no':
+      response = { 'text': 'Oops, try sending another image.' };
+      break;
+    case 'VIEW_COURSES_BY_CATEGORY':
+      response = {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": 'Chon linh vuc(category)',
+          "buttons": [
+            {
+              "type": "postback",
+              "title": "Lập trình Web",
+              "payload": "WEB_COURSE_ID"
+            },
+            {
+              "type": "postback",
+              "title": "Lập trình thiết bị di động",
+              "payload": "MOBILE_COURSE_ID"
+            }
+          ]
+        }
+      }
+      break;
   }
   // Send the message to acknowledge the postback
   callSendAPI(senderPsid, response);
