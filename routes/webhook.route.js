@@ -1,6 +1,7 @@
 // https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup
 
 const express = require('express');
+const request = require('request');
 const facebookConfig = require('../config/facebook.config.json');
 
 const router = express.Router();
