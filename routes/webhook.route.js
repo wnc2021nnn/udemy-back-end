@@ -112,22 +112,24 @@ function handlePostback(senderPsid, receivedPostback) {
       break;
     case 'VIEW_COURSES_BY_CATEGORY':
       response = {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": 'Chon linh vuc(category)',
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Lập trình Web",
-              "payload": "WEB_COURSE_ID"
-            },
-            {
-              "type": "postback",
-              "title": "Lập trình thiết bị di động",
-              "payload": "MOBILE_COURSE_ID"
-            }
-          ]
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "button",
+            "text": 'Chon linh vuc(category)',
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Lập trình Web",
+                "payload": "WEB_CATEGORY_ID"
+              },
+              {
+                "type": "postback",
+                "title": "Lập trình thiết bị di động",
+                "payload": "MOBILE_CATEGORY_ID"
+              }
+            ]
+          }
         }
       }
       break;
