@@ -202,24 +202,24 @@ function handlePostback(senderPsid, receivedPostback) {
       break;
     default:
       if (payload.includes('COURSE_ID_')) {
-        text = `iOS & Swift - The Complete iOS App Development Bootcamp Master app marketing so you can publish your apps and generate downloads`;
-        // 'text': text,
-        // From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!
-        // What you'll learn
-        // Be able to build any app you want
-        // Start your own app based business
-        // Create a portfolio of apps to apply for junior developer jobs at a technology company
-        // Become a digital nomad by working as a freelance iOS developer
-        // Learn to work with Apple's latest UI Framework - SwiftUI
-        // Master creating Augmented Reality apps using Apple’s new ARKit
-        // Create apps that use Machine Learning using Apple’s new CoreML
-        // Master app design so you'll know how to wireframe, mockup and prototype your app idea
+        text = `iOS & Swift - The Complete iOS App Development Bootcamp Master app marketing so you can publish your apps and generate downloads From Beginner to iOS App Developer with Just One Course! Fully Updated with a Comprehensive Module Dedicated to SwiftUI!
+        What you'll learn
+        Be able to build any app you want
+        Start your own app based business
+        Create a portfolio of apps to apply for junior developer jobs at a technology company
+        Become a digital nomad by working as a freelance iOS developer
+        Learn to work with Apple's latest UI Framework - SwiftUI
+        Master creating Augmented Reality apps using Apple’s new ARKit
+        Create apps that use Machine Learning using Apple’s new CoreML
+        Master app design so you'll know how to wireframe, mockup and prototype your app idea`;
+
         response = {
+          "text": text,
           "attachment": {
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": text,
+              "text": "iOS & Swift - The Complete iOS App Development Bootcamp Master app marketing so you can publish your apps and generate downloads",
               "buttons": [
                 {
                   "type": "web_url",
