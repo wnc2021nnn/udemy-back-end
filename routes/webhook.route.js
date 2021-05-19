@@ -6,6 +6,10 @@ const facebookConfig = require('../config/facebook.config.json');
 const { handleMessage, handlePostback } = require('../services/webhook.service')
 
 const router = express.Router();
+// Model
+const categoryModel = require("../models/category.model");
+const courseModel = require("../models/course.model");
+
 
 // Creates the endpoint for our webhook 
 // This code creates a /webhook endpoint that accepts POST requests,
@@ -85,6 +89,60 @@ router.get('/', (req, res) => {
     }
   }
 });
+
+const responseGetListCate = () =>{
+  const listCategory = categoryModel.all();
+  const responseListButton = [];
+  listCategory.forEach(element => {
+    responseListButton.push(
+      {
+        "type": "postback",
+        "title": element.name,
+        "payload": element.category_id
+      }
+    )
+  });
+
+  const response = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": 'Chon linh vuc(category)',
+        "buttons": responseListButton,
+      }
+    }
+  };
+
+  return response;
+}
+
+const responseSearchCourse = (query) => {
+  const lístCourse = courseModel.searchCourse(query);
+  const responseListButton = [];
+  listCategory.forEach(element => {
+    responseListButton.push(
+      {
+        "type": "postback",
+        "title": element.title,
+        "payload": element.course_id,
+      }
+    )
+  });
+
+  const response = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": query,
+        "buttons": responseListButton,
+      }
+    }
+  };
+
+  return response;
+}
 
 module.exports = router;
 
