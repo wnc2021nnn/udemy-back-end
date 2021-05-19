@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 app.get('/', function (req, res) {
   res.json({
-    message: 'Hello from WNC 2021 NNN Udemy API'
+    message: 'Hello from WNC 2021 NNN Udemy API, this shit is my test for API chatbot!'
   });
 })
 
