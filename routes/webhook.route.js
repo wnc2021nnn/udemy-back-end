@@ -6,6 +6,10 @@ const request = require('request');
 const facebookConfig = require('../config/facebook.config.json');
 
 const router = express.Router();
+// Model
+const categoryModel = require("../models/category.model");
+const courseModel = require("../models/course.model");
+
 
 // Creates the endpoint for our webhook 
 // This code creates a /webhook endpoint that accepts POST requests,
@@ -58,27 +62,29 @@ function handleMessage(senderPsid, receivedMessage) {
   if (receivedMessage.text) {
     // Create the payload for a basic text message, which
     // will be added to the body of your request to the Send API
-    response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": receivedMessage.text,
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Khoa hoc thu 1",
-              "payload": "COURSE_ID_1"
-            },
-            {
-              "type": "postback",
-              "title": "Khoa hoc thu 2",
-              "payload": "COURSE_ID_2"
-            }
-          ]
-        }
-      }
-    };
+    // response = {
+    //   "attachment": {
+    //     "type": "template",
+    //     "payload": {
+    //       "template_type": "button",
+    //       "text": receivedMessage.text,
+    //       "buttons": [
+    //         {
+    //           "type": "postback",
+    //           "title": "Khoa hoc thu 1",
+    //           "payload": "COURSE_ID_1"
+    //         },
+    //         {
+    //           "type": "postback",
+    //           "title": "Khoa hoc thu 2",
+    //           "payload": "COURSE_ID_2"
+    //         }
+    //       ]
+    //     }
+    //   }
+    // };
+    // Search course
+    response = responseSearchCourse(receivedMessage.text);
   } else if (receivedMessage.attachments) {
 
     // Get the URL of the message attachment
@@ -133,27 +139,8 @@ function handlePostback(senderPsid, receivedPostback) {
       response = { 'text': 'Nhập từ khóa để tìm kiếm' };
       break;
     case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
-      response = {
-        "attachment": {
-          "type": "template",
-          "payload": {
-            "template_type": "button",
-            "text": 'Chon linh vuc(category)',
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "Lập trình Web",
-                "payload": "WEB_CATEGORY_ID"
-              },
-              {
-                "type": "postback",
-                "title": "Lập trình thiết bị di động",
-                "payload": "MOBILE_CATEGORY_ID"
-              }
-            ]
-          }
-        }
-      }
+      // Get list category
+      response = responseGetListCate();
       break;
     case 'WEB_CATEGORY_ID':
       response = {
@@ -334,6 +321,60 @@ router.get('/', (req, res) => {
     }
   }
 });
+
+const responseGetListCate = () =>{
+  const listCategory = categoryModel.all();
+  const responseListButton = [];
+  listCategory.forEach(element => {
+    responseListButton.push(
+      {
+        "type": "postback",
+        "title": element.name,
+        "payload": element.category_id
+      }
+    )
+  });
+
+  const response = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": 'Chon linh vuc(category)',
+        "buttons": responseListButton,
+      }
+    }
+  };
+
+  return response;
+}
+
+const responseSearchCourse = (query) => {
+  const lístCourse = courseModel.searchCourse(query);
+  const responseListButton = [];
+  listCategory.forEach(element => {
+    responseListButton.push(
+      {
+        "type": "postback",
+        "title": element.title,
+        "payload": element.course_id,
+      }
+    )
+  });
+
+  const response = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": query,
+        "buttons": responseListButton,
+      }
+    }
+  };
+
+  return response;
+}
 
 module.exports = router;
 
