@@ -66,7 +66,7 @@ function handlePostback(senderPsid, receivedPostback) {
             break;
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
             const categories = [];
-            response = createCategoriesButtonsTemplate('Chon linh vuc(category)', categories);
+            response = createCategoriesButtonsTemplate('Chọn lĩnh vực', categories);
             break;
         default:
             if (payload.includes('CATEGORY_ITEM_ID_')) {
@@ -173,13 +173,13 @@ function createViewCourseDetailsButtonsTemplate(title, course) {
                     // },
                     {
                         "type": "web_url",
-                        "title": "Xem them",
+                        "title": "Chi tiết",
                         "url": "https://wnc2021be.herokuapp.com/",
                         "webview_height_ratio": "tall"
                     },
                     {
                         "type": "web_url",
-                        "title": "Di den trang web",
+                        "title": "Xem trên trang web",
                         "url": "https://wnc2021be.herokuapp.com/",
                         "webview_height_ratio": "full"
                     },
