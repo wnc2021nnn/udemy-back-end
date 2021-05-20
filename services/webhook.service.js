@@ -81,7 +81,7 @@ function  handlePostback (senderPsid, receivedPostback)  {
                 let course;
                 const course_id = payload.substring(15, payload.length-1);
                 courses = courseModel.getCourseByCateId(course_id);
-
+                console.log("Course id: "+course_id);
 
                 //callSendAPI(senderPsid, textRP);
 
@@ -161,6 +161,7 @@ function createCategoriesButtonsTemplate(title, categories) {
 }
 
 function createViewCourseDetailsButtonsTemplate(course) {
+    console.log("Course: "+JSON.stringify(course));
     return {
         "attachment": {
             "type": "template",
