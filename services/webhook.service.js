@@ -11,8 +11,11 @@ async function  handleMessage (senderPsid, receivedMessage) {
     if (receivedMessage.text) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
-        const courseList = await courseModel.searchCourse(receivedMessage.text);        
-        response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
+        // Search
+        const courseList = await courseModel.searchCourse(receivedMessage.text);
+        if(courseList!=null)        
+            response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
+        else response = {"text":"Not found"}
     
         console.log("Response of search: "+JSON.stringify(response));
     } else if (receivedMessage.attachments) {
@@ -65,27 +68,31 @@ async function  handlePostback (senderPsid, receivedPostback)  {
         // case 'no':
         //     response = { 'text': 'Oops, try sending another image.' };
         //     break;
+        // Search button
         case 'SEARCH_COURSES_BUTTON':
             response = { 'text': 'Nhập từ khóa để tìm kiếm' };
             break;
+        // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
-            const categories = [];
+            const categories = await categoryModel.all();
             response = createCategoriesButtonsTemplate('Chọn lĩnh vực', categories);
             break;
         default:
+            // View list course of category
             if (payload.includes('CATEGORY_ITEM_ID_')) {
                 const courses = [];
                 let categorie;
                 response = createCoursesButtonsTemplate(categorie.name, courses);
-            } else if (payload.includes('COURSE_ITEM_ID_')) {
-                let course;
-                const course_id = payload.substring(15, payload.length);
-                course =  await courseModel.getDetailCouresById(course_id);
-                console.log("Course id: "+course_id);
+            } else 
+                // View detail of course
+                if (payload.includes('COURSE_ITEM_ID_')) {
+                    const course_id = payload.substring(15, payload.length);
+                    const course =  await courseModel.getDetailCouresById(course_id);
+                    console.log("Course id: "+course_id);
 
-                //callSendAPI(senderPsid, textRP);
+                    //callSendAPI(senderPsid, textRP);
 
-                response = createViewCourseDetailsButtonsTemplate(course);
+                    response = createViewCourseDetailsButtonsTemplate(course);
 
             }
     }
@@ -148,13 +155,13 @@ function createCategoriesButtonsTemplate(title, categories) {
             "payload": {
                 "template_type": "button",
                 "text": title,
-                "buttons": categories.map(categorie => {
+                "buttons": [...categories.map(categorie => {
                     return {
                         "type": "postback",
                         "title": categorie.name,
                         "payload": `CATEGORY_ITEM_ID_${categorie.categorie_id}`
                     };
-                })
+                }), ]
             }
         }
     };
