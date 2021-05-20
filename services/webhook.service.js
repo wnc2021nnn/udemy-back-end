@@ -13,23 +13,7 @@ async function  handleMessage (senderPsid, receivedMessage) {
         // will be added to the body of your request to the Send API
         const courseList = await courseModel.searchCourse(receivedMessage.text);        
         //response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
-        response = {
-            "attachment":
-            {
-                "type":"template",
-                "payload":
-                {"template_type":"button","text":"Cac khoa hoc lien quan: Course",
-                "buttons":[
-                    {
-                        "type":"postback",
-                        "title":"Course no 1",
-                        "payload":"COURSE_ITEM_ID_1"
-                    },
-                    {"type":"postback","title":"Course no 2","payload":"COURSE_ITEM_ID_2"},
-                ]
-                }
-            }
-        };
+    
         console.log("Response of search: "+JSON.stringify(response));
     } else if (receivedMessage.attachments) {
 
@@ -95,15 +79,13 @@ function  handlePostback (senderPsid, receivedPostback)  {
                 response = createCoursesButtonsTemplate(categorie.name, courses);
             } else if (payload.includes('COURSE_ITEM_ID_')) {
                 let course;
-                courses_id = payload.substring(15, payload.length-1);
+                const course_id = payload.substring(15, payload.length-1);
                 courses = courseModel.getCourseByCateId(course_id);
-                let textRP = {
-                    "text": course.description
-                };
 
-                callSendAPI(senderPsid, textRP);
 
-                response = createViewCourseDetailsButtonsTemplate(course.title, course);
+                //callSendAPI(senderPsid, textRP);
+
+                response = createViewCourseDetailsButtonsTemplate(course);
 
             }
     }
@@ -178,32 +160,23 @@ function createCategoriesButtonsTemplate(title, categories) {
     };
 }
 
-function createViewCourseDetailsButtonsTemplate(title, course) {
+function createViewCourseDetailsButtonsTemplate(course) {
     return {
         "attachment": {
             "type": "template",
             "payload": {
-                "template_type": "button",
-                "text": title,
-                "buttons": [
-                    // {
-                    //     "type": "web_url",
-                    //     "title": "Xem them compact",
-                    //     "url": "https://wnc2021be.herokuapp.com/",
-                    //     "webview_height_ratio": "compact"
-                    // },
-                    {
-                        "type": "web_url",
-                        "title": "Chi tiết",
-                        "url": "https://wnc2021be.herokuapp.com/",
-                        "webview_height_ratio": "tall"
+                "template_type":"generic",
+                "elements":[
+                   {
+                    "title": course.title,
+                    "image_url":"https://i.picsum.photos/id/941/200/300.jpg?hmac=tSztWslp5Hm2jEg1UjAvvVNsaDT3dsPAEZ5lQ_yhNKA",
+                    "subtitle":course.description,
+                    "default_action": {
+                      "type": "web_url",
+                      "url": "https://wnc2021be.herokuapp.com/",
+                      "webview_height_ratio": "FULL"
                     },
-                    {
-                        "type": "web_url",
-                        "title": "Xem trên trang web",
-                        "url": "https://wnc2021be.herokuapp.com/",
-                        "webview_height_ratio": "full"
-                    },
+                  },
                 ]
             }
         }
