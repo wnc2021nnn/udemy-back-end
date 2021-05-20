@@ -3,7 +3,7 @@
 const { text } = require('body-parser');
 const express = require('express');
 const facebookConfig = require('../config/facebook.config.json');
-const { handleMessage, handlePostback } = require('../services/webhook.service')
+const { handleMessage, handlePostback,  createCoursesButtonsTemplate} = require('../services/webhook.service')
 
 const router = express.Router();
 // Model
@@ -90,6 +90,12 @@ router.get('/', (req, res) => {
   }
 });
 
+router.get('/test/:query', async (req, res)=>{
+  const query = req.params.query || "1";
+  const courseList = await courseModel.searchCourse(query);
+  res.json(createCoursesButtonsTemplate("Result", courseList));
+})
+
 const responseGetListCate = () =>{
   const listCategory = categoryModel.all();
   const responseListButton = [];
@@ -118,9 +124,9 @@ const responseGetListCate = () =>{
 }
 
 const responseSearchCourse = (query) => {
-  const lístCourse = courseModel.searchCourse(query);
+  const courseList = courseModel.searchCourse(query);
   const responseListButton = [];
-  listCategory.forEach(element => {
+  courseList.forEach(element => {
     responseListButton.push(
       {
         "type": "postback",
