@@ -79,7 +79,7 @@ function  handlePostback (senderPsid, receivedPostback)  {
                 response = createCoursesButtonsTemplate(categorie.name, courses);
             } else if (payload.includes('COURSE_ITEM_ID_')) {
                 let course;
-                const course_id = payload.substring(15, payload.length-1);
+                const course_id = payload.substring(15, payload.length);
                 courses = courseModel.getCourseByCateId(course_id);
                 console.log("Course id: "+course_id);
 
