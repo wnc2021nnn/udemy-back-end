@@ -75,7 +75,7 @@ let course = [
     
 ]
 
-export default {
+module.exports = {
     category,
     course
 }

@@ -349,8 +349,8 @@ const responseGetListCate = () =>{
   return response;
 }
 
-const responseSearchCourse = (query) => {
-  const lístCourse = courseModel.searchCourse(query);
+const responseSearchCourse = async (query) => {
+  const lístCourse = await courseModel.searchCourse(query);
   const responseListButton = [];
   listCategory.forEach(element => {
     responseListButton.push(
@@ -375,6 +375,12 @@ const responseSearchCourse = (query) => {
 
   return response;
 }
+
+router.get("/test", async (req, res) => {
+    const response = await responseGetListCate();
+
+    return res.json(response);
+})
 
 module.exports = router;
 

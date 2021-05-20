@@ -1,4 +1,4 @@
-import {category} from "../mock-data/mock-data"
+const {category} = require ("../mock-data/mock-data")
 
 module.exports = {
         all(){

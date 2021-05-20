@@ -1,4 +1,4 @@
-import {course} from "../mock-data/mock-data"
+const {course} = require ("../mock-data/mock-data")
 
 module.exports = {
     getAll() {

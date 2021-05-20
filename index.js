@@ -18,7 +18,17 @@ app.get('/', function (req, res) {
   });
 })
 
-app.use('/api/webhook', require('./routes/webhook.route'))
+app.use('/api/webhook', require('./routes/webhook.route'));
+
+// API
+// Category route
+app.use('/api/category', require('./routes/category.route'));
+// Course rout
+app.use('/api/course', require('./routes/course.route'));
+
+
+
+
 
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
