@@ -51,7 +51,7 @@ async function  handleMessage (senderPsid, receivedMessage) {
 }
 
 // Handles messaging_postbacks events
-function  handlePostback (senderPsid, receivedPostback)  {
+async function  handlePostback (senderPsid, receivedPostback)  {
     let response;
 
     // Get the payload for the postback
@@ -80,7 +80,7 @@ function  handlePostback (senderPsid, receivedPostback)  {
             } else if (payload.includes('COURSE_ITEM_ID_')) {
                 let course;
                 const course_id = payload.substring(15, payload.length);
-                courses = courseModel.getCourseByCateId(course_id);
+                course =  await courseModel.getDetailCouresById(course_id);
                 console.log("Course id: "+course_id);
 
                 //callSendAPI(senderPsid, textRP);
