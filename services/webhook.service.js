@@ -11,7 +11,7 @@ function handleMessage(senderPsid, receivedMessage) {
     if (receivedMessage.text) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
-        const courses = courseModel.searchCourse(receivedMessage.text);
+        const courses = [...courseModel.searchCourse(receivedMessage.text)];
         response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courses);
     } else if (receivedMessage.attachments) {
 
@@ -49,7 +49,7 @@ function handleMessage(senderPsid, receivedMessage) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(senderPsid, receivedPostback) {
+function  handlePostback (senderPsid, receivedPostback)  {
     let response;
 
     // Get the payload for the postback
