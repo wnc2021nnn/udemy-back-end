@@ -26,11 +26,7 @@ async function  handleMessage (senderPsid, receivedMessage) {
                         "payload":"COURSE_ITEM_ID_1"
                     },
                     {"type":"postback","title":"Course no 2","payload":"COURSE_ITEM_ID_2"},
-                    {"type":"postback","title":"Course no 3","payload":"COURSE_ITEM_ID_3"},
-                    {"type":"postback","title":"Course no 4","payload":"COURSE_ITEM_ID_4"},
-                    {"type":"postback","title":"Course no 5","payload":"COURSE_ITEM_ID_5"},
-                    {"type":"postback","title":"Course no 6","payload":"COURSE_ITEM_ID_6"},
-                    {"type":"postback","title":"Course no 7","payload":"COURSE_ITEM_ID_7"}]
+                ]
                 }
             }
         };
