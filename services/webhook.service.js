@@ -4,15 +4,15 @@ const facebookConfig = require('../config/facebook.config.json');
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
 // Handles messages events
-function handleMessage(senderPsid, receivedMessage) {
+async function  handleMessage (senderPsid, receivedMessage) {
     let response;
 
     // Checks if the message contains text
     if (receivedMessage.text) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
-        const courses = [...courseModel.searchCourse(receivedMessage.text)];
-        response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courses);
+        const courseList = await courseModel.searchCourse(query);        
+        response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
     } else if (receivedMessage.attachments) {
 
         // Get the URL of the message attachment
