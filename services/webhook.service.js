@@ -12,7 +12,28 @@ async function  handleMessage (senderPsid, receivedMessage) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
         const courseList = await courseModel.searchCourse(receivedMessage.text);        
-        response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
+        //response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
+        response = {
+            "attachment":
+            {
+                "type":"template",
+                "payload":
+                {"template_type":"button","text":"Cac khoa hoc lien quan: Course",
+                "buttons":[
+                    {
+                        "type":"postback",
+                        "title":"Course no 1",
+                        "payload":"COURSE_ITEM_ID_1"
+                    },
+                    {"type":"postback","title":"Course no 2","payload":"COURSE_ITEM_ID_2"},
+                    {"type":"postback","title":"Course no 3","payload":"COURSE_ITEM_ID_3"},
+                    {"type":"postback","title":"Course no 4","payload":"COURSE_ITEM_ID_4"},
+                    {"type":"postback","title":"Course no 5","payload":"COURSE_ITEM_ID_5"},
+                    {"type":"postback","title":"Course no 6","payload":"COURSE_ITEM_ID_6"},
+                    {"type":"postback","title":"Course no 7","payload":"COURSE_ITEM_ID_7"}]
+                }
+            }
+        };
         console.log("Response of search: "+JSON.stringify(response));
     } else if (receivedMessage.attachments) {
 
