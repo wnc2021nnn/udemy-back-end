@@ -1,6 +1,8 @@
 const request = require('request');
 const facebookConfig = require('../config/facebook.config.json');
-
+// Model
+const categoryModel = require("../models/category.model");
+const courseModel = require("../models/course.model");
 // Handles messages events
 function handleMessage(senderPsid, receivedMessage) {
     let response;
@@ -10,6 +12,7 @@ function handleMessage(senderPsid, receivedMessage) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
         const courses = [];
+        courses = courseModel.searchCourse(receivedMessage.text);
         response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courses);
     } else if (receivedMessage.attachments) {
 
@@ -75,7 +78,8 @@ function handlePostback(senderPsid, receivedPostback) {
                 response = createCoursesButtonsTemplate(categorie.name, courses);
             } else if (payload.includes('COURSE_ITEM_ID_')) {
                 let course;
-
+                courses_id = payload.substring(15, payload.length-1);
+                courses = courseModel.getCourseByCateId(course_id);
                 let textRP = {
                     "text": course.description
                 };
@@ -191,4 +195,5 @@ function createViewCourseDetailsButtonsTemplate(title, course) {
 module.exports = {
     handleMessage: handleMessage,
     handlePostback: handlePostback,
+    createCoursesButtonsTemplate,
 };
