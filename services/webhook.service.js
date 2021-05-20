@@ -11,7 +11,7 @@ async function  handleMessage (senderPsid, receivedMessage) {
     if (receivedMessage.text) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
-        const courseList = await courseModel.searchCourse(query);        
+        const courseList = await courseModel.searchCourse(receivedMessage.text);        
         response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
     } else if (receivedMessage.attachments) {
 
