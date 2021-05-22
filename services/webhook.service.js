@@ -4,7 +4,7 @@ const facebookConfig = require('../config/facebook.config.json');
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
 // Handles messages events
-async function  handleMessage (senderPsid, receivedMessage) {
+async function handleMessage(senderPsid, receivedMessage) {
     let response;
 
     // Checks if the message contains text
@@ -13,11 +13,17 @@ async function  handleMessage (senderPsid, receivedMessage) {
         // will be added to the body of your request to the Send API
         // Search
         const courseList = await courseModel.searchCourse(receivedMessage.text);
-        if(courseList!=null)        
-            response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courseList);
-        else response = {"text":"Not found"}
-    
-        console.log("Response of search: "+JSON.stringify(response));
+        if (courseList != null) {
+            const chunk = 3;
+            for (let i = 0; i < courseList.length; i += chunk) {
+                const chunkCourseList = courseList.slice(i, i + chunk);
+                response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, chunkCourseList);
+                callSendAPI(senderPsid, response);
+                console.log("Response of search: " + JSON.stringify(response));
+            }
+            return;
+        }
+        else response = { "text": "Not found" }
     } else if (receivedMessage.attachments) {
 
         // Get the URL of the message attachment
@@ -54,7 +60,7 @@ async function  handleMessage (senderPsid, receivedMessage) {
 }
 
 // Handles messaging_postbacks events
-async function  handlePostback (senderPsid, receivedPostback)  {
+async function handlePostback(senderPsid, receivedPostback) {
     let response;
 
     // Get the payload for the postback
@@ -83,18 +89,18 @@ async function  handlePostback (senderPsid, receivedPostback)  {
                 const courses = [];
                 let categorie;
                 response = createCoursesButtonsTemplate(categorie.name, courses);
-            } else 
+            } else
                 // View detail of course
                 if (payload.includes('COURSE_ITEM_ID_')) {
                     const course_id = payload.substring(15, payload.length);
-                    const course =  await courseModel.getDetailCouresById(course_id);
-                    console.log("Course id: "+course_id);
+                    const course = await courseModel.getDetailCouresById(course_id);
+                    console.log("Course id: " + course_id);
 
                     //callSendAPI(senderPsid, textRP);
 
                     response = createViewCourseDetailsButtonsTemplate(course);
 
-            }
+                }
     }
     // Send the message to acknowledge the postback
     callSendAPI(senderPsid, response);
@@ -155,36 +161,36 @@ function createCategoriesButtonsTemplate(title, categories) {
             "payload": {
                 "template_type": "button",
                 "text": title,
-                "buttons": [...categories.map(categorie => {
+                "buttons": categories.map(categorie => {
                     return {
                         "type": "postback",
                         "title": categorie.name,
                         "payload": `CATEGORY_ITEM_ID_${categorie.categorie_id}`
                     };
-                }), ]
+                }),
             }
         }
     };
 }
 
 function createViewCourseDetailsButtonsTemplate(course) {
-    console.log("Course: "+JSON.stringify(course));
+    console.log("Course: " + JSON.stringify(course));
     return {
         "attachment": {
             "type": "template",
             "payload": {
-                "template_type":"generic",
-                "elements":[
-                   {
-                    "title": course.title,
-                    "image_url":"https://i.picsum.photos/id/941/200/300.jpg?hmac=tSztWslp5Hm2jEg1UjAvvVNsaDT3dsPAEZ5lQ_yhNKA",
-                    "subtitle":course.description,
-                    "default_action": {
-                      "type": "web_url",
-                      "url": "https://wnc2021be.herokuapp.com/",
-                      "webview_height_ratio": "FULL"
+                "template_type": "generic",
+                "elements": [
+                    {
+                        "title": course.title,
+                        "image_url": "https://i.picsum.photos/id/941/200/300.jpg?hmac=tSztWslp5Hm2jEg1UjAvvVNsaDT3dsPAEZ5lQ_yhNKA",
+                        "subtitle": course.description,
+                        "default_action": {
+                            "type": "web_url",
+                            "url": "https://wnc2021be.herokuapp.com/",
+                            "webview_height_ratio": "FULL"
+                        },
                     },
-                  },
                 ]
             }
         }
