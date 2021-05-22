@@ -132,7 +132,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                         const listTopic = await topicModel.getTopicByCateId(categoryId);
                         if (listTopic.length > 0 && categoryItem) {
                             const chunk = 3;
-                            for (let i = 0; i < listCourse.length; i += chunk) {
+                            for (let i = 0; i < listTopic.length; i += chunk) {
                                 const listChunkTopic = listTopic.slice(i, i + chunk);
                                 response = createTopicsButtonsTemplate(categoryItem.name, listChunkTopic);
                                 console.log("Response of get topic of category: " + JSON.stringify(response));
