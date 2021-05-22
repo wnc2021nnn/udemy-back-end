@@ -205,7 +205,7 @@ const createCategoryButtonsTemplate = (title, listCategory) => {
                 "buttons": listCategory.map(categoryItem => {
                     return {
                         "type": "postback",
-                        "title": categoryItem.name,
+                        "title": categoryItem.title,
                         "payload": `CATEGORY_ITEM_ID_${categoryItem.category_id}`
                     };
                 }),
