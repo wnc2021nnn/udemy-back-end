@@ -10,4 +10,10 @@ router.get("/", (req, res) => {
     res.json(listTopic);
 })
 
+router.get("/:topicId", async (req, res) => {
+    const topicId = req.params.topicId;
+    const topicItem = await topicModel.getTopicById(topicId);
+    res.json(topicItem);
+})
+
 module.exports = router;

@@ -3,6 +3,7 @@ const facebookConfig = require('../config/facebook.config.json');
 // Model
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
+const topicModel = require('../models/topic.model');
 const topicMode = require("../models/topic.model")
 // Handles messages events
 async function handleMessage(senderPsid, receivedMessage) {
@@ -86,19 +87,31 @@ async function handlePostback(senderPsid, receivedPostback) {
                 const chunk = 3;
                 for (let i = 0; i < listTopic.length; i += chunk) {
                     const topicsChunk = listTopic.slice(i, i + chunk);
-                    response = createTopicsButtonsTemplate('Chọn topic', topicsChunk);
+                    response = createTopicsButtonsTemplate('Chọn chủ đề', topicsChunk);
                     console.log("List of topic: " + JSON.stringify(response));
                     callSendAPI(senderPsid, response);
                 }
                 return;
             }
+            else response = { "text": "Not found any result, please try again!" };
             break;
         default:
             // View list course of category
-            if (payload.includes('CATEGORY_ITEM_ID_')) {
-                const courses = [];
-                let categorie;
-                response = createCoursesButtonsTemplate(categorie.name, courses);
+            if (payload.includes('TOPIC_ITEM_ID_')) {
+                const topicId = payload.substring(14, payload.length);
+                const topicItem = await topicModel.getTopicById(topicId);
+                const listTopic = await categoryModel.getCategoryByTopicId(topicId);
+                if (listTopic.length > 0 && topicItem) {
+                    const chunk = 3;
+                    for (let i = 0; i < listTopic.length; i += chunk) {
+                        const listChunkTopic = listTopic.slice(i, i + chunk);
+                        response = createCategoryButtonsTemplate(topicItem.title, listChunkTopic);
+                        console.log("Response of get category of topic: " + JSON.stringify(response));
+                        callSendAPI(senderPsid, response);
+                    }
+                    return;
+                }
+                else response = { "text": "Not found any result, please try again!" };
             } else
                 // View detail of course
                 if (payload.includes('COURSE_ITEM_ID_')) {
@@ -159,6 +172,25 @@ function createCoursesButtonsTemplate(title, courses) {
                         "payload": `COURSE_ITEM_ID_${course.course_id}`
                     };
                 })
+            }
+        }
+    };
+}
+
+const createCategoryButtonsTemplate = (title, listCategory) => {
+    return {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": title,
+                "buttons": listCategory.map(categoryItem => {
+                    return {
+                        "type": "postback",
+                        "title": categoryItem.name,
+                        "payload": `CATEGORY_ITEM_ID_${categoryItem.category_id}`
+                    };
+                }),
             }
         }
     };
