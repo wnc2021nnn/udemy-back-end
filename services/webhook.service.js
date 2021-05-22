@@ -3,6 +3,7 @@ const facebookConfig = require('../config/facebook.config.json');
 // Model
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
+const topicMode = require("../models/topic.model")
 // Handles messages events
 async function handleMessage(senderPsid, receivedMessage) {
     let response;
@@ -23,7 +24,7 @@ async function handleMessage(senderPsid, receivedMessage) {
             }
             return;
         }
-        else response = { "text": "Not found" }
+        else response = { "text": "Not found any result, please try another keyword!" }
     } else if (receivedMessage.attachments) {
 
         // Get the URL of the message attachment
@@ -56,7 +57,7 @@ async function handleMessage(senderPsid, receivedMessage) {
     }
 
     // Send the response message
-    //callSendAPI(senderPsid, response);
+    callSendAPI(senderPsid, response);
 }
 
 // Handles messaging_postbacks events
@@ -80,8 +81,17 @@ async function handlePostback(senderPsid, receivedPostback) {
             break;
         // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
-            const categories = await categoryModel.all();
-            response = createCategoriesButtonsTemplate('Chọn lĩnh vực', categories);
+            const listTopic = topicMode.getAll();
+            if (listTopic.length > 0) {
+                const chunk = 3;
+                for (let i = 0; i < listTopic.length; i += chunk) {
+                    const topicsChunk = listTopic.slice(i, i + chunk);
+                    response = createTopicsButtonsTemplate('Chọn topic', topicsChunk);
+                    console.log("List of topic: " + JSON.stringify(response));
+                    callSendAPI(senderPsid, response);
+                }
+                return;
+            }
             break;
         default:
             // View list course of category
@@ -154,18 +164,18 @@ function createCoursesButtonsTemplate(title, courses) {
     };
 }
 
-function createCategoriesButtonsTemplate(title, categories) {
+function createTopicsButtonsTemplate(title, topics) {
     return {
         "attachment": {
             "type": "template",
             "payload": {
                 "template_type": "button",
                 "text": title,
-                "buttons": categories.map(categorie => {
+                "buttons": topics.map(topic => {
                     return {
                         "type": "postback",
-                        "title": categorie.name,
-                        "payload": `CATEGORY_ITEM_ID_${categorie.categorie_id}`
+                        "title": topic.title,
+                        "payload": `TOPIC_ITEM_ID_${topic.topic_id}`
                     };
                 }),
             }

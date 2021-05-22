@@ -1,35 +1,44 @@
-let category = [
+const category = [
     {
         category_id: "1",
-        name: "Computer Science"
+        name: "Computer Science",
+        topic_id: "1",
     },
     {
         category_id: "2",
-        name: "Data Science"
+        name: "Data Science",
+        topic_id: "1",
     },
     {
         category_id: "3",
-        name: "Cooking"
+        name: "Cooking",
+        topic_id: "2",
     },
     {
         category_id: "4",
-        name: "Comunication"
+        name: "Comunication",
+        topic_id: "2",
     },
     {
         category_id: "5",
-        name: "Information Technology"
+        name: "Information Technology",
+        topic_id: "2",
     },
     {
         category_id: "6",
-        name: "Biology "
+        name: "Biology ",
+        topic_id: "3",
+
     },
     {
         category_id: "7",
-        name: "Flirt"
+        name: "Flirt",
+        topic_id: "3",
+
     },
 ]
 
-let course = [
+const course = [
     {
         course_id: "1",
         title: "Course no 1",
@@ -72,10 +81,26 @@ let course = [
         description: "Description coures no 7",
         category_id: "7",
     },
-    
+
+]
+
+const topic = [
+    {
+        topic_id: "1",
+        title: "Topic no 1"
+    },
+    {
+        topic_id: "2",
+        title: "Topic no 2"
+    },
+    {
+        topic_id: "3",
+        title: "Topic no 3"
+    }
 ]
 
 module.exports = {
     category,
-    course
+    course,
+    topic
 }
