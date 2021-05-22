@@ -80,15 +80,15 @@ async function handlePostback(senderPsid, receivedPostback) {
         case 'SEARCH_COURSES_BUTTON':
             response = { 'text': 'Nhập từ khóa để tìm kiếm' };
             break;
-        // View list of topic 
+        // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
-            const listTopic = topicMode.getAll();
-            if (listTopic.length > 0) {
+            const listCategory = categoryModel.all();
+            if (listCategory.length > 0) {
                 const chunk = 3;
-                for (let i = 0; i < listTopic.length; i += chunk) {
-                    const topicsChunk = listTopic.slice(i, i + chunk);
-                    response = createTopicsButtonsTemplate('Chọn chủ đề', topicsChunk);
-                    console.log("List of topic: " + JSON.stringify(response));
+                for (let i = 0; i < listCategory.length; i += chunk) {
+                    const categoriesChunk = listCategory.slice(i, i + chunk);
+                    response = createCategoryButtonsTemplate('Chọn category', categoriesChunk);
+                    console.log("List of category: " + JSON.stringify(response));
                     callSendAPI(senderPsid, response);
                 }
                 return;
@@ -96,17 +96,17 @@ async function handlePostback(senderPsid, receivedPostback) {
             else response = { "text": "Not found any result, please try again!" };
             break;
         default:
-            // View list category of topic
+            // View list course of topic
             if (payload.includes('TOPIC_ITEM_ID_')) {
                 const topicId = payload.substring(14, payload.length);
                 const topicItem = await topicModel.getTopicById(topicId);
-                const listTopic = await categoryModel.getCategoryByTopicId(topicId);
-                if (listTopic.length > 0 && topicItem) {
+                const listCourse = await courseModel.getCourseByTopic(topicId);
+                if (listCourse.length > 0 && topicItem) {
                     const chunk = 3;
-                    for (let i = 0; i < listTopic.length; i += chunk) {
-                        const listChunkTopic = listTopic.slice(i, i + chunk);
-                        response = createCategoryButtonsTemplate(topicItem.title, listChunkTopic);
-                        console.log("Response of get category of topic: " + JSON.stringify(response));
+                    for (let i = 0; i < listCourse.length; i += chunk) {
+                        const listChunkCourse = listCourse.slice(i, i + chunk);
+                        response = createCategoryButtonsTemplate(topicItem.title, listChunkCourse);
+                        console.log("Response of get course of topic: " + JSON.stringify(response));
                         callSendAPI(senderPsid, response);
                     }
                     return;
@@ -125,17 +125,17 @@ async function handlePostback(senderPsid, receivedPostback) {
 
                 }
                 else
-                    // View list of course base on category
+                    // View list of topic base on category
                     if (payload.includes('CATEGORY_ITEM_ID_')) {
                         const categoryId = payload.substring(17, payload.length);
                         const categoryItem = await categoryModel.getCategoryById(categoryId);
-                        const listCourse = await courseModel.getCourseByCateId(categoryId);
-                        if (listCourse.length > 0 && categoryItem) {
+                        const listTopic = await topicModel.getTopicByCateId(categoryId);
+                        if (listTopic.length > 0 && categoryItem) {
                             const chunk = 3;
                             for (let i = 0; i < listCourse.length; i += chunk) {
-                                const listChunkCourse = listCourse.slice(i, i + chunk);
-                                response = createCoursesButtonsTemplate(categoryItem.name, listChunkCourse);
-                                console.log("Response of get course of category: " + JSON.stringify(response));
+                                const listChunkTopic = listTopic.slice(i, i + chunk);
+                                response = createCoursesButtonsTemplate(categoryItem.name, listChunkTopic);
+                                console.log("Response of get topic of category: " + JSON.stringify(response));
                                 callSendAPI(senderPsid, response);
                             }
                             return;

@@ -10,9 +10,9 @@ router.get("/", (req, res) => {
     res.json(listTopic);
 })
 
-router.get("/:topicId", async (req, res) => {
-    const topicId = req.params.topicId;
-    const topicItem = await topicModel.getTopicById(topicId);
+router.get("/:cateId", async (req, res) => {
+    const cateId = req.params.cateId;
+    const topicItem = await topicModel.getTopicByCateId(cateId);
     res.json(topicItem);
 })
 

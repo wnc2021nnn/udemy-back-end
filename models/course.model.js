@@ -5,8 +5,8 @@ module.exports = {
         return course;
     },
 
-    async getCourseByCateId(cateId) {
-        const listCourse = await course.filter(courseItem => courseItem.category_id === cateId);
+    async getCourseByTopic(topicId) {
+        const listCourse = await course.filter(courseItem => courseItem.topic_id === topicId);
         return listCourse;
     },
 
