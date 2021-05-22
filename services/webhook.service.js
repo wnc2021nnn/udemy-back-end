@@ -80,7 +80,7 @@ async function handlePostback(senderPsid, receivedPostback) {
         case 'SEARCH_COURSES_BUTTON':
             response = { 'text': 'Nhập từ khóa để tìm kiếm' };
             break;
-        // View list of category 
+        // View list of topic 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
             const listTopic = topicMode.getAll();
             if (listTopic.length > 0) {
@@ -96,7 +96,7 @@ async function handlePostback(senderPsid, receivedPostback) {
             else response = { "text": "Not found any result, please try again!" };
             break;
         default:
-            // View list course of category
+            // View list category of topic
             if (payload.includes('TOPIC_ITEM_ID_')) {
                 const topicId = payload.substring(14, payload.length);
                 const topicItem = await topicModel.getTopicById(topicId);
@@ -124,6 +124,24 @@ async function handlePostback(senderPsid, receivedPostback) {
                     response = createViewCourseDetailsButtonsTemplate(course);
 
                 }
+                else
+                    // View list of course base on category
+                    if (payload.includes('CATEGORY_ITEM_ID_')) {
+                        const categoryId = payload.substring(17, payload.length);
+                        const categoryItem = await categoryModel.getCategoryById(categoryId);
+                        const listCourse = await courseModel.getCourseByCateId(categoryId);
+                        if (listCourse.length > 0 && categoryItem) {
+                            const chunk = 3;
+                            for (let i = 0; i < listCourse.length; i += chunk) {
+                                const listChunkCourse = listCourse.slice(i, i + chunk);
+                                response = createCoursesButtonsTemplate(categoryItem.name, listChunkCourse);
+                                console.log("Response of get course of category: " + JSON.stringify(response));
+                                callSendAPI(senderPsid, response);
+                            }
+                            return;
+                        }
+                        else response = { "text": "Not found any result, please try again!" };
+                    }
     }
     // Send the message to acknowledge the postback
     callSendAPI(senderPsid, response);

@@ -6,12 +6,12 @@ module.exports = {
     },
 
     async getCourseByCateId(cateId) {
-        const listCourse = await course.filter(courseItem => courseItem.category_id == cateId);
+        const listCourse = await course.filter(courseItem => courseItem.category_id === cateId);
         return listCourse;
     },
 
     async getDetailCouresById(courseId) {
-        const courseItem = await course.find(courseItem => courseItem.course_id == courseId);
+        const courseItem = await course.find(courseItem => courseItem.course_id === courseId);
         return courseItem;
     },
 
