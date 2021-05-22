@@ -134,7 +134,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                             const chunk = 3;
                             for (let i = 0; i < listCourse.length; i += chunk) {
                                 const listChunkTopic = listTopic.slice(i, i + chunk);
-                                response = createCoursesButtonsTemplate(categoryItem.name, listChunkTopic);
+                                response = createTopicsButtonsTemplate(categoryItem.name, listChunkTopic);
                                 console.log("Response of get topic of category: " + JSON.stringify(response));
                                 callSendAPI(senderPsid, response);
                             }
