@@ -13,7 +13,7 @@ async function handleMessage(senderPsid, receivedMessage) {
         // will be added to the body of your request to the Send API
         // Search
         const courseList = await courseModel.searchCourse(receivedMessage.text);
-        if (courseList != null) {
+        if (courseList.length > 0) {
             const chunk = 3;
             for (let i = 0; i < courseList.length; i += chunk) {
                 const chunkCourseList = courseList.slice(i, i + chunk);
@@ -56,7 +56,7 @@ async function handleMessage(senderPsid, receivedMessage) {
     }
 
     // Send the response message
-    callSendAPI(senderPsid, response);
+    //callSendAPI(senderPsid, response);
 }
 
 // Handles messaging_postbacks events
