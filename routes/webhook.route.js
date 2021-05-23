@@ -3,7 +3,7 @@
 const { text } = require('body-parser');
 const express = require('express');
 const facebookConfig = require('../config/facebook.config.json');
-const { handleMessage, handlePostback,  createCoursesButtonsTemplate} = require('../services/webhook.service')
+const { handleMessage, handlePostback } = require('../services/webhook.service')
 
 const router = express.Router();
 // Model
@@ -89,66 +89,6 @@ router.get('/', (req, res) => {
     }
   }
 });
-
-router.get('/test/:query', async (req, res)=>{
-  const query = req.params.query || "1";
-  const courseList = await courseModel.searchCourse(query);
-  res.json(createCoursesButtonsTemplate("Result", courseList));
-})
-
-const responseGetListCate = () =>{
-  const listCategory = categoryModel.all();
-  const responseListButton = [];
-  listCategory.forEach(element => {
-    responseListButton.push(
-      {
-        "type": "postback",
-        "title": element.name,
-        "payload": element.category_id
-      }
-    )
-  });
-
-  const response = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": 'Chon linh vuc(category)',
-        "buttons": responseListButton,
-      }
-    }
-  };
-
-  return response;
-}
-
-const responseSearchCourse = (query) => {
-  const courseList = courseModel.searchCourse(query);
-  const responseListButton = [];
-  courseList.forEach(element => {
-    responseListButton.push(
-      {
-        "type": "postback",
-        "title": element.title,
-        "payload": element.course_id,
-      }
-    )
-  });
-
-  const response = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": query,
-        "buttons": responseListButton,
-      }
-    }
-  };
-
-  return response;
-}
 
 module.exports = router;
 
