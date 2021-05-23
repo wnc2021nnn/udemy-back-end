@@ -1,18 +1,38 @@
 const request = require('request');
 const facebookConfig = require('../config/facebook.config.json');
+// Response helper
+const { createCoursesButtonsTemplate,
+    createCategoryButtonsTemplate,
+    createTopicsButtonsTemplate,
+    createViewCourseDetailsButtonsTemplate } = require("../utils/webhook-response-helper")
+
 // Model
 const categoryModel = require("../models/category.model");
 const courseModel = require("../models/course.model");
-// Handles messages events
-function handleMessage(senderPsid, receivedMessage) {
-    let response;
+const topicModel = require('../models/topic.model');
 
+//Number items of list
+const CHUNK = 3;
+
+// Handles messages events
+async function handleMessage(senderPsid, receivedMessage) {
+    let response;
     // Checks if the message contains text
     if (receivedMessage.text) {
         // Create the payload for a basic text message, which
         // will be added to the body of your request to the Send API
-        const courses = courseModel.searchCourse(receivedMessage.text);
-        response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, courses);
+        // Search
+        const courseList = await courseModel.searchCourse(receivedMessage.text);
+        if (courseList.length > 0) {
+            for (let i = 0; i < courseList.length; i += CHUNK) {
+                const chunkCourseList = courseList.slice(i, i + CHUNK);
+                response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, chunkCourseList);
+                callSendAPI(senderPsid, response);
+                console.log("Response of search: " + JSON.stringify(response));
+            }
+            return;
+        }
+        else response = { "text": "Not found any result, please try another keyword!" }
     } else if (receivedMessage.attachments) {
 
         // Get the URL of the message attachment
@@ -49,7 +69,7 @@ function handleMessage(senderPsid, receivedMessage) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(senderPsid, receivedPostback) {
+async function handlePostback(senderPsid, receivedPostback) {
     let response;
 
     // Get the payload for the postback
@@ -57,37 +77,69 @@ function handlePostback(senderPsid, receivedPostback) {
 
     // Set the response based on the postback payload
     switch (payload) {
-        // case 'yes':
-        //     response = { 'text': 'Thanks!' };
-        //     break;
-        // case 'no':
-        //     response = { 'text': 'Oops, try sending another image.' };
-        //     break;
+        // Search button
         case 'SEARCH_COURSES_BUTTON':
             response = { 'text': 'Nhập từ khóa để tìm kiếm' };
             break;
+        // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
-            const categories = [];
-            response = createCategoriesButtonsTemplate('Chọn lĩnh vực', categories);
+            const listCategory = categoryModel.all();
+            if (listCategory.length > 0) {
+                for (let i = 0; i < listCategory.length; i += CHUNK) {
+                    const categoriesChunk = listCategory.slice(i, i + CHUNK);
+                    response = createCategoryButtonsTemplate('Chọn category', categoriesChunk);
+                    console.log("List of category: " + JSON.stringify(response));
+                    callSendAPI(senderPsid, response);
+                }
+                return;
+            }
+            else response = { "text": "Not found any result, please try again!" };
             break;
         default:
-            if (payload.includes('CATEGORY_ITEM_ID_')) {
-                const courses = [];
-                let categorie;
-                response = createCoursesButtonsTemplate(categorie.name, courses);
-            } else if (payload.includes('COURSE_ITEM_ID_')) {
-                let course;
-                courses_id = payload.substring(15, payload.length-1);
-                courses = courseModel.getCourseByCateId(course_id);
-                let textRP = {
-                    "text": course.description
-                };
+            // View list course of topic
+            if (payload.includes('TOPIC_ITEM_ID_')) {
+                const topicId = payload.substring(14, payload.length);
+                const topicItem = await topicModel.getTopicById(topicId);
+                const listCourse = await courseModel.getCourseByTopic(topicId);
+                if (listCourse.length > 0 && topicItem) {
+                    for (let i = 0; i < listCourse.length; i += CHUNK) {
+                        const listChunkCourse = listCourse.slice(i, i + CHUNK);
+                        response = createCoursesButtonsTemplate(topicItem.title, listChunkCourse);
+                        console.log("Response of get course of topic: " + JSON.stringify(response));
+                        callSendAPI(senderPsid, response);
+                    }
+                    return;
+                }
+                else response = { "text": "Not found any result, please try again!" };
+            } else
+                // View detail of course
+                if (payload.includes('COURSE_ITEM_ID_')) {
+                    const course_id = payload.substring(15, payload.length);
+                    const course = await courseModel.getDetailCouresById(course_id);
+                    console.log("Course id: " + course_id);
 
-                callSendAPI(senderPsid, textRP);
+                    //callSendAPI(senderPsid, textRP);
 
-                response = createViewCourseDetailsButtonsTemplate(course.title, course);
+                    response = createViewCourseDetailsButtonsTemplate(course);
 
-            }
+                }
+                else
+                    // View list of topic base on category
+                    if (payload.includes('CATEGORY_ITEM_ID_')) {
+                        const categoryId = payload.substring(17, payload.length);
+                        const categoryItem = await categoryModel.getCategoryById(categoryId);
+                        const listTopic = await topicModel.getTopicByCateId(categoryId);
+                        if (listTopic.length > 0 && categoryItem) {
+                            for (let i = 0; i < listTopic.length; i += CHUNK) {
+                                const listChunkTopic = listTopic.slice(i, i + CHUNK);
+                                response = createTopicsButtonsTemplate(categoryItem.title, listChunkTopic);
+                                console.log("Response of get topic of category: " + JSON.stringify(response));
+                                callSendAPI(senderPsid, response);
+                            }
+                            return;
+                        }
+                        else response = { "text": "Not found any result, please try again!" };
+                    }
     }
     // Send the message to acknowledge the postback
     callSendAPI(senderPsid, response);
@@ -95,10 +147,8 @@ function handlePostback(senderPsid, receivedPostback) {
 
 // Sends response messages via the Send API
 function callSendAPI(senderPsid, response) {
-
     // The page access token we have generated in your app settings
     const PAGE_ACCESS_TOKEN = facebookConfig.PAGE_ACCESS_TOKEN;
-
     // Construct the message body
     let requestBody = {
         'recipient': {
@@ -106,7 +156,6 @@ function callSendAPI(senderPsid, response) {
         },
         'message': response
     };
-
     // Send the HTTP request to the Messenger Platform
     request({
         'uri': 'https://graph.facebook.com/v2.6/me/messages',
@@ -122,77 +171,8 @@ function callSendAPI(senderPsid, response) {
     });
 }
 
-function createCoursesButtonsTemplate(title, courses) {
-    return {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": title,
-                "buttons": courses.map(course => {
-                    return {
-                        "type": "postback",
-                        "title": course.title,
-                        "payload": `COURSE_ITEM_ID_${course.course_id}`
-                    };
-                })
-            }
-        }
-    };
-}
 
-function createCategoriesButtonsTemplate(title, categories) {
-    return {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": title,
-                "buttons": categories.map(categorie => {
-                    return {
-                        "type": "postback",
-                        "title": categorie.name,
-                        "payload": `CATEGORY_ITEM_ID_${categorie.categorie_id}`
-                    };
-                })
-            }
-        }
-    };
-}
-
-function createViewCourseDetailsButtonsTemplate(title, course) {
-    return {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": title,
-                "buttons": [
-                    // {
-                    //     "type": "web_url",
-                    //     "title": "Xem them compact",
-                    //     "url": "https://wnc2021be.herokuapp.com/",
-                    //     "webview_height_ratio": "compact"
-                    // },
-                    {
-                        "type": "web_url",
-                        "title": "Chi tiết",
-                        "url": "https://wnc2021be.herokuapp.com/",
-                        "webview_height_ratio": "tall"
-                    },
-                    {
-                        "type": "web_url",
-                        "title": "Xem trên trang web",
-                        "url": "https://wnc2021be.herokuapp.com/",
-                        "webview_height_ratio": "full"
-                    },
-                ]
-            }
-        }
-    };
-}
 module.exports = {
     handleMessage: handleMessage,
     handlePostback: handlePostback,
-    createCoursesButtonsTemplate,
 };

@@ -5,7 +5,7 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   app = express(); // creates express http server
-  morgan = require('morgan');
+morgan = require('morgan');
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -23,8 +23,10 @@ app.use('/api/webhook', require('./routes/webhook.route'))
 // API
 // Category route
 app.use('/api/category', require('./routes/category.route'));
-// Course rout
-app.use('/api/course', require('./routes/coures.route'));
+// Course route
+app.use('/api/course', require('./routes/course.route'));
+// Topic route
+app.use('/api/topic', require('./routes/topic.route'));
 
 
 // Sets server port and logs message on success

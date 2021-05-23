@@ -5,13 +5,13 @@ module.exports = {
         return course;
     },
 
-    async getCourseByCateId(cateId) {
-        const listCourse = await course.filter(courseItem => courseItem.category_id == cateId);
+    async getCourseByTopic(topicId) {
+        const listCourse = await course.filter(courseItem => courseItem.topic_id === topicId);
         return listCourse;
     },
 
     async getDetailCouresById(courseId) {
-        const courseItem = await course.find(courseItem => courseItem.course_id == courseId);
+        const courseItem = await course.find(courseItem => courseItem.course_id === courseId);
         return courseItem;
     },
 
