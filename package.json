@@ -1,0 +1,29 @@
+{
+  "name": "udemy-back-end",
+  "version": "1.0.0",
+  "description": "WNC 2021 Final project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wnc2021nnn/udemy-back-end.git"
+  },
+  "author": "Nha Nguyen, Nhin Le Chi, Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wnc2021nnn/udemy-back-end/issues"
+  },
+  "homepage": "https://github.com/wnc2021nnn/udemy-back-end#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
