@@ -1,0 +1,4 @@
+{
+    "PG_CONNECTION_STRING": "dbname=devgrrdbv0qrf2 host=ec2-54-224-194-214.compute-1.amazonaws.com port=5432 user=fvtczrdakehlnp password=cdbdc6f2e2b7f7adbfcd014551d68c0b69ced21f6f81057d79c503866ea439b4 sslmode=require",
+    "PG_CONNECTION_URL": "postgres://fvtczrdakehlnp:cdbdc6f2e2b7f7adbfcd014551d68c0b69ced21f6f81057d79c503866ea439b4@ec2-54-224-194-214.compute-1.amazonaws.com:5432/devgrrdbv0qrf2"
+}
