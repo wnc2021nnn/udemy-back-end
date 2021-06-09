@@ -129,6 +129,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                         const categoryId = payload.substring(17, payload.length);
                         console.log('categoryId', categoryId);
                         const categoryItem = await categoryModel.getCategoryById(categoryId)[0];
+                        console.log('categoryItem', categoryItem);
                         const listTopic = await topicModel.getTopicByCateId(categoryId);
                         console.log('listTopic', listTopic);
                         if (listTopic.length > 0 && categoryItem) {
