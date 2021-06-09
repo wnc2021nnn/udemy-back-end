@@ -127,6 +127,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                     // View list of topic base on category
                     if (payload.includes('CATEGORY_ITEM_ID_')) {
                         const categoryId = payload.substring(17, payload.length);
+                        console.log('categoryId', categoryId);
                         const categoryItem = await categoryModel.getCategoryById(categoryId)[0];
                         const listTopic = await topicModel.getTopicByCateId(categoryId);
                         if (listTopic.length > 0 && categoryItem) {

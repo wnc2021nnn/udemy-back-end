@@ -10,11 +10,6 @@ router.get("/", async (req, res) => {
     res.json(listCourse);
 })
 
-router.get("/:id", async (req, res) => {
-    const courseId = req.params.id;
-    const listCourse = await couresModel.getDetailCouresById(courseId);
-    res.json(listCourse);
-})
 
 router.get("/filter", async (req, res) => {
     const topicId = req.query.topicId;
@@ -33,6 +28,11 @@ router.get('/search', async function (req, res) {
 });
 
 
+router.get("/:id", async (req, res) => {
+    const courseId = req.params.id;
+    const listCourse = await couresModel.getDetailCouresById(courseId);
+    res.json(listCourse);
+})
 
 
 module.exports = router;
