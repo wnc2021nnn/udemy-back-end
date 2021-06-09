@@ -83,7 +83,7 @@ async function handlePostback(senderPsid, receivedPostback) {
             break;
         // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
-            const listCategory = categoryModel.all();
+            const listCategory = await categoryModel.all();
             if (listCategory.length > 0) {
                 for (let i = 0; i < listCategory.length; i += CHUNK) {
                     const categoriesChunk = listCategory.slice(i, i + CHUNK);
