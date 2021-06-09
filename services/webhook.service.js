@@ -99,7 +99,7 @@ async function handlePostback(senderPsid, receivedPostback) {
             // View list course of topic
             if (payload.includes('TOPIC_ITEM_ID_')) {
                 const topicId = payload.substring(14, payload.length);
-                const topicItem = await topicModel.getTopicById(topicId);
+                const topicItem = await topicModel.getTopicById(topicId)[0];
                 const listCourse = await courseModel.getCourseByTopic(topicId);
                 if (listCourse.length > 0 && topicItem) {
                     for (let i = 0; i < listCourse.length; i += CHUNK) {
@@ -115,7 +115,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                 // View detail of course
                 if (payload.includes('COURSE_ITEM_ID_')) {
                     const course_id = payload.substring(15, payload.length);
-                    const course = await courseModel.getDetailCouresById(course_id);
+                    const course = await courseModel.getDetailCouresById(course_id)[0];
                     console.log("Course id: " + course_id);
 
                     //callSendAPI(senderPsid, textRP);
@@ -127,7 +127,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                     // View list of topic base on category
                     if (payload.includes('CATEGORY_ITEM_ID_')) {
                         const categoryId = payload.substring(17, payload.length);
-                        const categoryItem = await categoryModel.getCategoryById(categoryId);
+                        const categoryItem = await categoryModel.getCategoryById(categoryId)[0];
                         const listTopic = await topicModel.getTopicByCateId(categoryId);
                         if (listTopic.length > 0 && categoryItem) {
                             for (let i = 0; i < listTopic.length; i += CHUNK) {
