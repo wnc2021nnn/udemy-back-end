@@ -5,8 +5,13 @@ const categoryModel = require('../models/category.model');
 const router = express.Router();
 
 router.get('/', async function (req, res) {
-    const listCategory = await categoryModel.all();
-    res.json(listCategory);
+    try{
+        const listCategory = await categoryModel.all();
+        res.json(listCategory);
+    } catch(ex){
+        console.log('Get all categories error', ex);
+        res.status(404, ex).send();
+    }   
 });
 
 router.get('/:categoryId', async function (req, res) {

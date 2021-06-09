@@ -1,11 +1,14 @@
 const { category } = require("../mock-data/mock-data");
+const db = require('../utils/db');
+const TBL_CATEGORY = 'category'
 
 module.exports = {
     all() {
-        return category;
+        return db(TBL_CATEGORY);
     },
-    async getCategoryById(cateId) {
-        const categoryResult = await category.find((categoryItem) => categoryItem.category_id === cateId);
-        return categoryResult;
+    getCategoryById(cateId) {
+        return db(TBL_CATEGORY).where({
+            category_id: cateId
+        });
     }
 }
