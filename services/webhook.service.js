@@ -130,6 +130,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                         console.log('categoryId', categoryId);
                         const categoryItem = await categoryModel.getCategoryById(categoryId)[0];
                         const listTopic = await topicModel.getTopicByCateId(categoryId);
+                        console.log('listTopic', listTopic);
                         if (listTopic.length > 0 && categoryItem) {
                             for (let i = 0; i < listTopic.length; i += CHUNK) {
                                 const listChunkTopic = listTopic.slice(i, i + CHUNK);
