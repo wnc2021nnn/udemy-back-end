@@ -7,7 +7,6 @@ const router = express.Router();
 router.get('/', async function (req, res) {
     try{
         const listCategory = await categoryModel.all();
-        console.log('LIST CATES', listCategory);
         res.json(listCategory);
     } catch(ex){
         console.log('Get all categories error', ex);

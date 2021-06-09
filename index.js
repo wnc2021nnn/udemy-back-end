@@ -22,11 +22,11 @@ app.use('/api/webhook', require('./routes/webhook.route'))
 
 // API
 // Category route
-app.use('/api/category', require('./routes/category.route'));
+app.use('/api/categories', require('./routes/category.route'));
 // Course route
-app.use('/api/course', require('./routes/course.route'));
+app.use('/api/courses', require('./routes/course.route'));
 // Topic route
-app.use('/api/topic', require('./routes/topic.route'));
+app.use('/api/topics', require('./routes/topic.route'));
 
 
 // Sets server port and logs message on success

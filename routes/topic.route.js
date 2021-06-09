@@ -4,14 +4,19 @@ const topicModel = require('../models/topic.model')
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    const listTopic = topicModel.getAll();
-    console.log(listTopic);
+router.get("/",async (req, res) => {
+    const listTopic = await topicModel.getAll();
     res.json(listTopic);
 })
 
-router.get("/:cateId", async (req, res) => {
-    const cateId = req.params.cateId;
+router.get("/:topicId", async (req, res) => {
+    const topicId = req.params.topicId;
+    const topicItem = await topicModel.getTopicById(topicId);
+    res.json(topicItem);
+})
+
+router.get("/filter", async (req, res) => {
+    const cateId = req.query.cateId;
     const topicItem = await topicModel.getTopicByCateId(cateId);
     res.json(topicItem);
 })
