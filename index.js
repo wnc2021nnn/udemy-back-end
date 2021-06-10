@@ -18,6 +18,8 @@ app.get('/', function (req, res) {
   });
 })
 
+require('./handlers/listeners/event-listener')
+
 app.use('/api/webhook', require('./routes/webhook.route'))
 
 // API
@@ -27,7 +29,8 @@ app.use('/api/categories', require('./routes/category.route'));
 app.use('/api/courses', require('./routes/course.route'));
 // Topic route
 app.use('/api/topics', require('./routes/topic.route'));
-
+// Log route
+app.use('/api/logs', require('./routes/log.route'));
 
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));

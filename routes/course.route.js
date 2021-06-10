@@ -1,4 +1,3 @@
-const { json } = require('express');
 const express = require('express');
 const couresModel = require('../models/course.model');
 
@@ -32,6 +31,5 @@ router.get("/:id", async (req, res) => {
         "data": listCourse[0] ?? null
     });
 })
-
 
 module.exports = router;
