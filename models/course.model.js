@@ -20,8 +20,6 @@ module.exports = {
     },
 
     async searchCourse(query) {
-        return [];
-        // const courseList = await course.filter(courseItem => courseItem.title.includes(query));
-        // return courseList;
+        return db(TBL_COURSE).where('title', 'like', `%${query}%`);
     }
 }
