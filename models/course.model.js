@@ -30,6 +30,13 @@ module.exports = {
         }
     },
 
+    update(courseId, createdAt) {
+        return db(TBL_COURSE).where({ course_id: courseId })
+            .update({ created_at: createdAt }
+                , ['course_id', 'created_at']
+            );
+    },
+
     async searchCourse(query) {
         return db(TBL_COURSE).where('title', 'like', `%${query}%`);
     }

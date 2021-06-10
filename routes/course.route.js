@@ -7,7 +7,11 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const topicId = req.query.topic;
     const query = req.query.search;
+    const sort = req.query.sort;
+    const limit = req.query.limit;
+
     var listCourse = [];
+
     if (topicId) {
         listCourse = await couresModel.getCourseByTopic(topicId);
     } else if (query) {
@@ -15,6 +19,19 @@ router.get("/", async (req, res) => {
     } else {
         listCourse = await couresModel.getAll();
     }
+
+    if (sort && sort === 'view_des') {
+        listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
+    }
+
+    if (sort && sort === 'created_date_des') {
+        listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
+    }
+
+    if(limit && limit > 0){
+        listCourse = listCourse.slice(0, limit);
+    }
+
     res.json({
         "status": "success",
         "meta": req.query,
