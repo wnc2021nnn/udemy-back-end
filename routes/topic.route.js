@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     var listTopic = [];
 
     if (sort && sort === 'register_des') {
-
+        listTopic = await topicModel.getAll(); //TODO implement this API
     } else if (categoryId) {
         listTopic = await topicModel.getTopicByCateId(categoryId);
     } else {

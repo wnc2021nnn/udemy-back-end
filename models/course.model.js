@@ -37,6 +37,13 @@ module.exports = {
             );
     },
 
+    updateUpdatedAt(courseId, updatedAt) {
+        return db(TBL_COURSE).where({ course_id: courseId })
+            .update({ updated_at: updatedAt }
+                , ['course_id', 'updated_at']
+            );
+    },
+
     async searchCourse(query) {
         return db(TBL_COURSE).where('title', 'like', `%${query}%`);
     }
