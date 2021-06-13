@@ -6,10 +6,13 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     const categoryId = req.query.category;
+    const sort = req.query.sort;
 
     var listTopic = [];
 
-    if (categoryId) {
+    if (sort && sort === 'register_des') {
+
+    } else if (categoryId) {
         listTopic = await topicModel.getTopicByCateId(categoryId);
     } else {
         listTopic = await topicModel.getAll();
