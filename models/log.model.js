@@ -11,5 +11,16 @@ module.exports = {
             "created_at": createdAt,
             "user_id": userId
         });
+    },
+
+    coursesRegistedWithInCount(timeInMiliseconds) {
+        return db(TBL_LOG).select({
+            course_id: 'target_id',
+            // registed_times: 'count',
+        }).count().where({
+            type: "COURSE_REGISTED"
+        }).andWhere(function () {
+            this.where('created_at', '>=', timeInMiliseconds)
+        }).groupBy('target_id').orderBy('count', 'desc');
     }
 }

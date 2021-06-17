@@ -32,6 +32,8 @@ app.use('/api/topics', require('./routes/topic.route'));
 // Log route
 app.use('/api/logs', require('./routes/log.route'));
 
+app.use('/api/course-content', require('./routes/course-content.route'));
+
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
 
