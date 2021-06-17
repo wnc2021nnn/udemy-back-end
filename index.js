@@ -6,7 +6,11 @@ const
   bodyParser = require('body-parser'),
   app = express(); // creates express http server
 morgan = require('morgan');
+// Import Connect/Express middleware that can be used to enable CORS with various options.
+var cors = require('cors')
 
+// Enable AllCORS Request
+app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
