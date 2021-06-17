@@ -7,17 +7,24 @@ const router = express.Router();
 router.get('/', async function (req, res) {
     try{
         const listCategory = await categoryModel.all();
-        res.json(listCategory);
+        res.json({
+            "status": "success",
+            "data": listCategory
+        });
     } catch(ex){
         console.log('Get all categories error', ex);
-        res.status(404, ex).send();
+        res.status(204, ex).send();
     }   
 });
 
 router.get('/:categoryId', async function (req, res) {
     const categoryId = req.params.categoryId;
     const listCategory = await categoryModel.getCategoryById(categoryId);
-    res.json(listCategory);
+    res.json({
+        "status": "success",
+        "meta": req.params,
+        "data": listCategory[0] ?? null
+    });
 });
 
 module.exports = router;

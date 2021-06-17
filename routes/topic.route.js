@@ -4,21 +4,33 @@ const topicModel = require('../models/topic.model')
 
 const router = express.Router();
 
-router.get("/",async (req, res) => {
-    const listTopic = await topicModel.getAll();
-    res.json(listTopic);
-})
+router.get("/", async (req, res) => {
+    const categoryId = req.query.category;
+    const sort = req.query.sort;
 
-router.get("/filter", async (req, res) => {
-    const cateId = req.query.cateId;
-    const topicItem = await topicModel.getTopicByCateId(cateId);
-    res.json(topicItem);
+    var listTopic = [];
+
+    if (sort && sort === 'register_des') {
+        listTopic = await topicModel.getAll(); //TODO implement this API
+    } else if (categoryId) {
+        listTopic = await topicModel.getTopicByCateId(categoryId);
+    } else {
+        listTopic = await topicModel.getAll();
+    }
+
+    res.json({
+        "meta": req.query,
+        "data": listTopic
+    });
 })
 
 router.get("/:topicId", async (req, res) => {
     const topicId = req.params.topicId;
-    const topicItem = await topicModel.getTopicById(topicId);
-    res.json(topicItem);
+    const topicItems = await topicModel.getTopicById(topicId);
+    res.json({
+        "meta": req.params,
+        "data": topicItems[0] ?? null,
+    });
 })
 
 module.exports = router;
