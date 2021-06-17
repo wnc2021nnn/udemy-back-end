@@ -1,5 +1,6 @@
 const express = require('express');
 const couresModel = require('../models/course.model');
+const courseService = require('../services/course.service')
 
 
 const router = express.Router();
@@ -12,24 +13,28 @@ router.get("/", async (req, res) => {
 
     var listCourse = [];
 
-    if (topicId) {
-        listCourse = await couresModel.getCourseByTopic(topicId);
-    } else if (query) {
-        listCourse = await couresModel.searchCourse(query);
+    if (sort && sort === 'view_from_last_week_des') {
+        listCourse = await courseService.coursesViewedDesFromLastWeek();
     } else {
-        listCourse = await couresModel.getAll();
-    }
+        if (topicId) {
+            listCourse = await couresModel.getCourseByTopic(topicId);
+        } else if (query) {
+            listCourse = await couresModel.searchCourse(query);
+        } else {
+            listCourse = await couresModel.getAll();
+        }
 
-    if (sort && sort === 'view_des') {
-        listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
-    }
+        if (sort && sort === 'view_des') {
+            listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
+        }
 
-    if (sort && sort === 'created_date_des') {
-        listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
-    }
+        if (sort && sort === 'created_date_des') {
+            listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
+        }
 
-    if(limit && limit > 0){
-        listCourse = listCourse.slice(0, limit);
+        if (limit && limit > 0) {
+            listCourse = listCourse.slice(0, limit);
+        }
     }
 
     res.json({

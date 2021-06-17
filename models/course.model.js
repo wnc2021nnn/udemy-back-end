@@ -18,6 +18,12 @@ module.exports = {
         });
     },
 
+    getCouresByIds(courseIds) {
+        return db(TBL_COURSE).whereIn(
+            'course_id', courseIds
+        );
+    },
+
     getTopicIdsByCoursesIds(ids) {
         return db(TBL_COURSE).select('course_id', 'topic_id').whereIn('course_id', ids).groupBy('course_id', 'topic_id');
     },
