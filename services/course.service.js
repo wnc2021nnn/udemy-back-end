@@ -4,7 +4,7 @@ const courseModel = require('../models/course.model');
 
 module.exports = {
     async coursesViewedDesFromLastWeek(limit = 4) {
-        const lastWeek = Date.now() - 3 * 7 * 24 * 60 * 60 * 1000;
+        const lastWeek = Date.now() - 7 * 24 * 60 * 60 * 1000;
         const coursesViewLog = await logModel.coursesViewedWithInCount(lastWeek);
         const limitedCoursesViewLog = coursesViewLog.slice(0, limit);
         const ids = limitedCoursesViewLog.map((l) => l.course_id);
