@@ -11,6 +11,9 @@ module.exports = {
             topic_id: topicId
         });
     },
+    getTopicsByIds(topicIds) {
+        return db(TBL_TOPIC).whereIn('topic_id', topicIds);
+    },
     getTopicByCateId(cateId) {
         return db(TBL_TOPIC).where({
             category_id: cateId

@@ -18,6 +18,10 @@ module.exports = {
         });
     },
 
+    getTopicIdsByCoursesIds(ids) {
+        return db(TBL_COURSE).select('course_id', 'topic_id').whereIn('course_id', ids).groupBy('course_id', 'topic_id');
+    },
+
     async increaseViewCountByOne(courseId) {
         const course = (await this.getDetailCouresById(courseId))[0];
         if (course) {

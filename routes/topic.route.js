@@ -1,6 +1,7 @@
 const { json } = require('express');
 const express = require('express');
 const topicModel = require('../models/topic.model')
+const topicService = require('../services/topic.service')
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get("/", async (req, res) => {
     var listTopic = [];
 
     if (sort && sort === 'register_des') {
-        listTopic = await topicModel.getAll(); //TODO implement this API
+        listTopic = await topicService.topicRegistedTimesDesFrom(Date.now() - 7*24*60*60*1000)
     } else if (categoryId) {
         listTopic = await topicModel.getTopicByCateId(categoryId);
     } else {
