@@ -40,6 +40,8 @@ app.use('/api/course-content', require('./routes/course-content.route'));
 
 app.use('/api/course-reviews', require('./routes/course-reviews.route'));
 
+app.use('/api/users', require('./routes/user.route'));
+
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
 
