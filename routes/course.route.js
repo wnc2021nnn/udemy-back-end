@@ -1,4 +1,5 @@
 const express = require('express');
+const courseModel = require('../models/course.model');
 const couresModel = require('../models/course.model');
 const courseService = require('../services/course.service')
 
@@ -52,6 +53,26 @@ router.get("/:id", async (req, res) => {
         "meta": req.params,
         "data": listCourse[0] ?? null
     });
+})
+
+router.get("/:id/related-courses", async (req, res) => {
+    const courseId = req.params.id;
+    const limit = req.query.limit ?? 6;
+    const sort = req.query.sort;
+    const course = (await couresModel.getDetailCouresById(courseId))[0];
+    if(course && sort === 'registed_des'){
+        const courses = await courseModel.getTopRegistedCoursesByTopic(course.topic_id, limit);
+        res.json({
+            "status": "success",
+            "meta": {
+                "params": req.params,
+                "query": req.query,
+            },
+            "data": courses ?? null
+        });
+    } else {
+        res.status(204).send();
+    }
 })
 
 module.exports = router;
