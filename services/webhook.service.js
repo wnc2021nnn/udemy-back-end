@@ -1,5 +1,4 @@
 const request = require('request');
-const facebookConfig = require('../config/facebook.config.json');
 // Response helper
 const { createCoursesButtonsTemplate,
     createCategoryButtonsTemplate,
@@ -151,7 +150,7 @@ async function handlePostback(senderPsid, receivedPostback) {
 // Sends response messages via the Send API
 function callSendAPI(senderPsid, response) {
     // The page access token we have generated in your app settings
-    const PAGE_ACCESS_TOKEN = facebookConfig.PAGE_ACCESS_TOKEN;
+    const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
     // Construct the message body
     let requestBody = {
         'recipient': {
@@ -162,7 +161,7 @@ function callSendAPI(senderPsid, response) {
     // Send the HTTP request to the Messenger Platform
     request({
         'uri': 'https://graph.facebook.com/v2.6/me/messages',
-        'qs': { 'access_token': PAGE_ACCESS_TOKEN },
+        'qs': { 'access_token': FB_PAGE_ACCESS_TOKEN },
         'method': 'POST',
         'json': requestBody
     }, (err, _res, _body) => {
