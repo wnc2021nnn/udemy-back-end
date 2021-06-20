@@ -66,3 +66,14 @@ module.exports = {
         return db(TBL_COURSE).where('title', 'like', `%${query}%`);
     }
 }
+
+    // .select(
+    //     [
+    //         `${TBL_COURSE}.*`,
+    //         'user.user_id as lecturer_id',
+    //         'user.first_name as lecturer_first_name',
+    //         'user.last_name as lecturer_last_name',
+    //     ]
+    // )
+
+    // .leftJoin('user', 'course.lecturers_id', 'user.user_id')
