@@ -1,4 +1,3 @@
-const { topic } = require("../mock-data/mock-data")
 const db = require('../utils/db');
 const TBL_TOPIC = 'topic'
 
