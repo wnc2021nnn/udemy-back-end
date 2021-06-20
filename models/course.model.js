@@ -3,31 +3,82 @@ const TBL_COURSE = 'course'
 
 module.exports = {
     getAll() {
-        return db(TBL_COURSE);
+        return db(TBL_COURSE)
+            .select(
+                [
+                    `${TBL_COURSE}.*`,
+                    'user.user_id as lecturer_id',
+                    'user.first_name as lecturer_first_name',
+                    'user.last_name as lecturer_last_name',
+                ]
+            )
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id');
     },
 
     getCourseByTopic(topicId) {
-        return db(TBL_COURSE).where({
-            topic_id: topicId
-        });
+        return db(TBL_COURSE)
+            .select(
+                [
+                    `${TBL_COURSE}.*`,
+                    'user.user_id as lecturer_id',
+                    'user.first_name as lecturer_first_name',
+                    'user.last_name as lecturer_last_name',
+                ]
+            )
+            .where({
+                topic_id: topicId
+            })
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id');
+
     },
 
     getTopRegistedCoursesByTopic(topicId, limit = 6) {
-        return db(TBL_COURSE).where({
-            topic_id: topicId
-        }).orderBy('registed_count', 'desc').limit(limit);
+        return db(TBL_COURSE)
+            .select(
+                [
+                    `${TBL_COURSE}.*`,
+                    'user.user_id as lecturer_id',
+                    'user.first_name as lecturer_first_name',
+                    'user.last_name as lecturer_last_name',
+                ]
+            )
+            .where({
+                topic_id: topicId
+            })
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+            .orderBy('registed_count', 'desc').limit(limit);
     },
 
     getDetailCouresById(courseId) {
-        return db(TBL_COURSE).where({
-            course_id: courseId
-        });
+        return db(TBL_COURSE)
+            .select(
+                [
+                    `${TBL_COURSE}.*`,
+                    'user.user_id as lecturer_id',
+                    'user.first_name as lecturer_first_name',
+                    'user.last_name as lecturer_last_name',
+                ]
+            )
+            .where({
+                course_id: courseId
+            })
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id');
     },
 
     getCouresByIds(courseIds) {
-        return db(TBL_COURSE).whereIn(
-            'course_id', courseIds
-        );
+        return db(TBL_COURSE)
+            .select(
+                [
+                    `${TBL_COURSE}.*`,
+                    'user.user_id as lecturer_id',
+                    'user.first_name as lecturer_first_name',
+                    'user.last_name as lecturer_last_name',
+                ]
+            )
+            .whereIn(
+                'course_id', courseIds
+            )
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id');
     },
 
     getTopicIdsByCoursesIds(ids) {

@@ -1,6 +1,10 @@
 const db = require('../utils/db');
 const TBL_USER = "user";
 module.exports = {
+    usersByUserIds(ids) {
+        return db(TBL_USER).whereIn('user_id', ids);
+    },
+
     //   all() {
     //     return db('users');
     //   },
