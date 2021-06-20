@@ -1,7 +1,7 @@
 const express = require('express');
 const courseModel = require('../models/course.model');
 const couresModel = require('../models/course.model');
-const courseService = require('../services/course.service')
+const courseService = require('../services/course.service');
 
 
 const router = express.Router();
@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
     res.json({
         "status": "success",
         "meta": req.query,
-        "data": listCourse,
+        "data": listCourse
     });
 })
 
