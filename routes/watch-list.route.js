@@ -1,5 +1,6 @@
 const express = require('express');
 const wlModel = require('../models/watch-list.model');
+const courseModel = require('../models/course.model')
 
 const { v4 } = require('uuid');
 
@@ -11,14 +12,25 @@ router.get('/', async function (req, res) {
 
         const items = await wlModel.multiByUserId(userId);
 
+        var courses = await courseModel.getCouresByIds(items.map((i) => i.course_id));
+
+        courses = courses.map((c) => {
+            const watch_list_item_created_at = items.find((i) => i.course_id === c.course_id).created_at;
+            return {
+                ...c,
+                "watch_list_item_created_at": watch_list_item_created_at
+            }
+        });
+
         res.json({
             "status": "success",
-            "data": items,
+            "data": courses,
         });
 
     } catch (ex) {
+        console.log(ex)
         res.status(401).send({
-            error: ex
+            "error": ex
         });
     }
 });
