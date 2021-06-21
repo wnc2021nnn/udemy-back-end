@@ -1,9 +1,9 @@
 const herokuDbConnection = {
-  host : process.env.host,
-  user : process.env.user,
-  password : process.env.password,
+  host : process.env.pg_host,
+  user : process.env.pg_user,
+  password : process.env.pg_password,
   database : process.env.database,
-  port: process.env.port
+  port: process.env.pg_port
 };
 
 const localDbConnection = {

@@ -18,29 +18,29 @@ module.exports = {
     //     return users[0];
     //   },
 
-    //   async singleByUserName(username) {
-    //     const users = await db('users').where('username', username);
-    //     if (users.length === 0) {
-    //       return null;
-    //     }
+      async singleByEmail(email) {
+        const users = await db(TBL_USER).where('email', email);
+        if (users.length === 0) {
+          return null;
+        }
 
-    //     return users[0];
-    //   },
+        return users[0];
+      },
 
     add(user) {
         return db(TBL_USER).insert(user);
     },
 
-    //   patchRFToken(id, rfToken) {
-    //     return db('users').where('id', id).update('rfToken', rfToken);
-    //   },
+      patchRFToken(id, rfToken) {
+        return db(TBL_USER).where('user_id', id).update('refresh_token', rfToken);
+      },
 
-    //   async isValidRFToken(id, rfToken) {
-    //     const list = await db('users').where('id', id).andWhere('rfToken', rfToken);
-    //     if (list.length > 0) {
-    //       return true;
-    //     }
+      async isValidRFToken(id, rfToken) {
+        const list = await db(TBL_USER).where('user_id', id).andWhere('refresh_token', rfToken);
+        if (list.length > 0) {
+          return true;
+        }
 
-    //     return false;
-    //   }
+        return false;
+      }
 };
