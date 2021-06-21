@@ -5,6 +5,7 @@ module.exports = function (req, res, next) {
   const accessToken = req.headers['x-access-token'];
   if (accessToken) {
     try {
+      console.log(env);
       const decoded = jwt.verify(accessToken, env.JWT_SECRET_KEY);
       console.log(decoded);
       req.accessTokenPayload = decoded;

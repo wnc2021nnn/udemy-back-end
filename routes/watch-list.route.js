@@ -5,6 +5,24 @@ const { v4 } = require('uuid');
 
 const router = express.Router();
 
+router.get('/', async function (req, res) {
+    try {
+        const userId = req.accessTokenPayload.user_id;
+
+        const items = await wlModel.multiByUserId(userId);
+
+        res.json({
+            "status": "success",
+            "data": items,
+        });
+
+    } catch (ex) {
+        res.status(401).send({
+            error: ex
+        });
+    }
+});
+
 router.put('/', async function (req, res) {
     try {
         const item = { ...req.body };
@@ -28,7 +46,6 @@ router.put('/', async function (req, res) {
         }
 
     } catch (ex) {
-        console.log('Get all categories error', ex);
         res.status(401).send({
             error: ex
         });
