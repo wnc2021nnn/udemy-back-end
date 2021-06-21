@@ -1,5 +1,5 @@
 // 'use strict';
-require('dotenv').config()
+require('dotenv').config();
 // Imports dependencies and set up http server
 const
   express = require('express'),
@@ -13,6 +13,8 @@ var cors = require('cors')
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+
+const authMdw = require('./middlewares/auth.mdw');
 
 const PORT = process.env.PORT || 5000;
 
@@ -42,6 +44,8 @@ app.use('/api/course-content', require('./routes/course-content.route'));
 app.use('/api/course-reviews', require('./routes/course-reviews.route'));
 
 app.use('/api/users', require('./routes/user.route'));
+
+app.use('/api/watch-list', authMdw, require('./routes/watch-list.route'));
 
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));

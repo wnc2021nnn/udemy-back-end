@@ -6,7 +6,6 @@ module.exports = function (req, res, next) {
   if (accessToken) {
     try {
       const decoded = jwt.verify(accessToken, env.JWT_SECRET_KEY);
-      console.log(decoded);
       req.accessTokenPayload = decoded;
       next();
     } catch (err) {
