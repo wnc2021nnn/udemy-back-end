@@ -52,5 +52,21 @@ router.put('/', async function (req, res) {
     }
 });
 
+router.delete('/', async function (req, res) {
+    try {
+        const item = { ...req.body };
+        item['user_id'] = req.accessTokenPayload.user_id;
+        const ret = await wlModel.delete(item);
+
+        res.json({
+            "status": "success",
+            "data": ret,
+        });
+    } catch (ex) {
+        res.status(401).send({
+            error: ex
+        });
+    }
+});
 
 module.exports = router;
