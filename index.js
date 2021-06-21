@@ -1,5 +1,5 @@
 // 'use strict';
-
+require('dotenv').config()
 // Imports dependencies and set up http server
 const
   express = require('express'),
@@ -27,6 +27,7 @@ require('./handlers/listeners/event-listener')
 app.use('/api/webhook', require('./routes/webhook.route'))
 
 // API
+app.use('/api/auth', require('./routes/auth.route'));
 // Category route
 app.use('/api/categories', require('./routes/category.route'));
 // Course route

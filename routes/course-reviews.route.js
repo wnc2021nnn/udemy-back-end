@@ -13,12 +13,12 @@ router.get("/", async (req, res) => {
     });
 })
 
-router.put("/", async (req, res) => {
+router.put("/", require('../middlewares/auth.mdw'), async (req, res) => {
     const body = req.body;
-    const review = {...body};
+    const review = { ...body };
     review["course_review_id"] = uuidv4();
     review["created_at"] = Date.now();
-    review["user_id"] = "user_000009"; //TODO fix this field
+    review["user_id"] = req.accessTokenPayload.user_id;
     const result = await courseReviewsModel.add(review);
     res.json({
         "meta": req.body,
