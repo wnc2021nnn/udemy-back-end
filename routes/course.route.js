@@ -3,7 +3,6 @@ const courseModel = require('../models/course.model');
 const couresModel = require('../models/course.model');
 const courseService = require('../services/course.service');
 
-
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -45,6 +44,14 @@ router.get("/", async (req, res) => {
     });
 })
 
+router.get("/my-courses", require('../middlewares/auth.mdw'), async (req, res) => {
+    const userId = req.accessTokenPayload.user_id;
+    const myCourses = await courseService.getUserPurchasedCourses(userId);
+    res.json({
+        "data": myCourses,
+    })
+})
+
 router.get("/:id", async (req, res) => {
     const courseId = req.params.id;
     const listCourse = await couresModel.getDetailCouresById(courseId);
@@ -60,7 +67,7 @@ router.get("/:id/related-courses", async (req, res) => {
     const limit = req.query.limit ?? 6;
     const sort = req.query.sort;
     const course = (await couresModel.getDetailCouresById(courseId))[0];
-    if(course && sort === 'registed_des'){
+    if (course && sort === 'registed_des') {
         const courses = await courseModel.getTopRegistedCoursesByTopic(course.topic_id, limit);
         res.json({
             "status": "success",
@@ -74,5 +81,6 @@ router.get("/:id/related-courses", async (req, res) => {
         res.status(204).send();
     }
 })
+
 
 module.exports = router;
