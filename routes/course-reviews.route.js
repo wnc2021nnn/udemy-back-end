@@ -1,6 +1,7 @@
 const express = require('express');
 const courseReviewsModel = require('../models/course-reviews.model')
 const { v4: uuidv4 } = require('uuid');
+const courseReviewService = require('../services/course-review.service');
 
 const router = express.Router();
 
@@ -14,16 +15,21 @@ router.get("/", async (req, res) => {
 })
 
 router.put("/", require('../middlewares/auth.mdw'), async (req, res) => {
-    const body = req.body;
-    const review = { ...body };
-    review["course_review_id"] = uuidv4();
-    review["created_at"] = Date.now();
-    review["user_id"] = req.accessTokenPayload.user_id;
-    const result = await courseReviewsModel.add(review);
-    res.json({
-        "meta": req.body,
-        "data": review ?? null,
-    });
+    try {
+        const body = req.body;
+        const review = { ...body };
+        review["user_id"] = req.accessTokenPayload.user_id;
+        const result = await courseReviewService.createAReview(review);
+        res.json({
+            "meta": req.body,
+            "data": review ?? null,
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            "error": error
+        })
+    }
 })
 
 module.exports = router;
