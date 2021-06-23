@@ -47,6 +47,8 @@ app.use('/api/users', require('./routes/user.route'));
 
 app.use('/api/watch-list', authMdw, require('./routes/watch-list.route'));
 
+app.use('/api/purchases', authMdw, require('./routes/purchase.route'));
+
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
 

@@ -1,6 +1,7 @@
 const topicModel = require('../models/topic.model')
 const logModel = require('../models/log.model')
 const courseModel = require('../models/course.model');
+const purchaseModel = require('../models/purchase.model');
 
 module.exports = {
     async coursesViewedDesFromLastWeek(limit = 4) {
@@ -35,4 +36,11 @@ module.exports = {
             return result;
         }
     },
+
+    async getUserPurchasedCourses(userId) {
+        const purchases = await purchaseModel.multiByUserIdAndType(userId, 'COURSE_PURCHASE');
+        const courseIds = purchases.map((p) => p.item_id);
+        const courses = await courseModel.getCouresByIds(courseIds);
+        return courses;
+    }
 }
