@@ -28,4 +28,46 @@ router.put('/', async function (req, res) {
 
 })
 
+router.patch('/', require('../middlewares/auth.mdw'), async function (req, res) {
+    try {
+        const userId = req.accessTokenPayload.user_id;
+        const user = await userModel.single(userId);
+
+        if (user === null) {
+            return res.json({
+                status: false
+            });
+        }
+
+        if (req.body.old_password && req.body.password) {
+            if (!bcrypt.compareSync(req.body.old_password, user.password)) {
+                return res.json({
+                    status: false
+                });
+            }
+            user.password = bcrypt.hashSync(req.body.password, 10);
+
+            await userModel.patchPassword(userId, user.password);
+        }
+
+        if (req.body.first_name && req.body.last_name) {
+            await userModel.patchUsername(userId, req.body.first_name, req.body.last_name);
+            user['first_name'] = req.body.first_name;
+            user['last_name'] = req.body.last_name;
+        }
+
+        delete user.password;
+
+        res.status(201).json({
+            //"meta": req.body,
+            "data": user
+        });
+    } catch (ex) {
+        res.status(400).send({
+            "meta": req.body,
+            "data": ex
+        });
+    }
+
+})
 module.exports = router;
