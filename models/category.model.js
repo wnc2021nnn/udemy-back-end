@@ -7,8 +7,9 @@ module.exports = {
         return db(TBL_CATEGORY);
     },
     getCategoryById(cateId) {
-        return db(TBL_CATEGORY).where({
-            category_id: cateId
-        });
+        return db(TBL_CATEGORY)
+            .where({
+                category_id: cateId
+            });
     }
 }
