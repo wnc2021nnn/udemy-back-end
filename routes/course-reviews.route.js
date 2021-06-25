@@ -14,7 +14,10 @@ router.get("/", async (req, res) => {
     });
 })
 
-router.put("/", require('../middlewares/auth.mdw'), async (req, res) => {
+
+const reviewSchema = require('../schemas/course-review.json');
+
+router.put("/", require('../middlewares/validate.mdw')(reviewSchema), require('../middlewares/auth.mdw'), async (req, res) => {
     try {
         const body = req.body;
         const review = { ...body };

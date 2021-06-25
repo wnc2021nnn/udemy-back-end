@@ -15,7 +15,8 @@ const router = express.Router();
 //     });
 // })
 
-router.put("/", async (req, res) => {
+const pcSchema = require('../schemas/purchase.json');
+router.put("/", require('../middlewares/validate.mdw')(pcSchema), async (req, res) => {
     const purchase = { ...req.body };
     purchase["id"] = uuidv4();
     purchase["created_at"] = Date.now();

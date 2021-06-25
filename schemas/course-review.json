@@ -1,0 +1,44 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://example.com/object1624611062.json",
+	"title": "Root",
+	"type": "object",
+	"required": [
+		"course_id",
+		"rating"
+	],
+	"properties": {
+		"course_id": {
+			"$id": "#root/course_id",
+			"title": "Course_id",
+			"type": "string",
+			"default": "",
+			"examples": [
+				"course_000002"
+			],
+			"pattern": "^.*$"
+		},
+		"rating": {
+			"$id": "#root/rating",
+			"title": "Rating",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 5,
+			"examples": [
+				3
+			],
+			"default": 0
+		},
+		"reviews_text": {
+			"$id": "#root/reviews_text",
+			"title": "Reviews_text",
+			"type": "string",
+			"default": "",
+			"examples": [
+				"Khoa hoc rat huu ich 22"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}

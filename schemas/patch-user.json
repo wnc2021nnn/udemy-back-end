@@ -1,0 +1,49 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1624613664.json", 
+	"title": "Root", 
+	"type": "object",
+	"properties": {
+		"first_name": {
+			"$id": "#root/first_name", 
+			"title": "First_name", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"Nha"
+			],
+			"pattern": "^.*$"
+		},
+		"last_name": {
+			"$id": "#root/last_name", 
+			"title": "Last_name", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"Nguyen Hoang Van"
+			],
+			"pattern": "^.*$"
+		},
+		"old_password": {
+			"$id": "#root/old_password", 
+			"title": "Old_password", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"test1pass"
+			],
+			"pattern": "^.*$"
+		},
+		"password": {
+			"$id": "#root/password", 
+			"title": "Password", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"test2pass"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}
