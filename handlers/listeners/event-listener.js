@@ -4,6 +4,7 @@ var events = require('events');
 var eventEmitter = new events.EventEmitter();
 
 const courseModel = require('../../models/course.model');
+const logModel = require('../../models/log.model');
 const courseService = require('../../services/course.service');
 
 eventEmitter.addListener('USER_VIEW_COURSE', async (log) => {
@@ -12,6 +13,7 @@ eventEmitter.addListener('USER_VIEW_COURSE', async (log) => {
 })
 
 eventEmitter.addListener('COURSE_REGISTED', async (log) => {
+    await logModel.add(log);
     const res = await courseService.increaseRegistedCountByOne(log.target_id);
     console.log("COURSE_REGISTED", res);
 })
