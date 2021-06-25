@@ -1,0 +1,43 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1624610720.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"type",
+		"target_id"
+	],
+	"properties": {
+		"type": {
+			"$id": "#root/type", 
+			"title": "Type", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"USER_VIEW_COURSE"
+			],
+			"pattern": "^.*$"
+		},
+		"target_id": {
+			"$id": "#root/target_id", 
+			"title": "Target_id", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"course_000002"
+			],
+			"pattern": "^.*$"
+		},
+		"data": {
+			"$id": "#root/data", 
+			"title": "Data", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"{\"course_id\":\"course_000002\",\"title\":\"The Complete 2021 Web Development Bootcamp\",\"description\":\"The Complete 2021 Web Development Bootcamp\",\"topic_id\":\"topic_009\",\"lecturers_id\":\"user_000002\",\"rating\":0,\"rating_total\":0,\"avatar\":\"https://img-b.udemycdn.com/course/240x135/1565838_e54e_12.jpg?secure=Ug7wdsHvrfyMinIk6xW0AA%3D%3D%2C1621897500 1x, https://img-b.udemycdn.com/course/480x270/1565838_e54e_12.jpg?secure=uhr1SfwNDKNDghxFZ8o3qQ%3D%3D%2C1621897500 2x\",\"price\":4.047462,\"view_count\":6,\"created_at\":\"1622901379044\",\"updated_at\":\"1621193614452\",\"registed_count\":2}"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}

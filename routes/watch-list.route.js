@@ -35,7 +35,8 @@ router.get('/', async function (req, res) {
     }
 });
 
-router.put('/', async function (req, res) {
+const wlSchema = require('../schemas/watch-list.json')
+router.put('/', require('../middlewares/validate.mdw')(wlSchema), async function (req, res) {
     try {
         const item = { ...req.body };
         item['user_id'] = req.accessTokenPayload.user_id;
@@ -64,7 +65,7 @@ router.put('/', async function (req, res) {
     }
 });
 
-router.delete('/', async function (req, res) {
+router.delete('/', require('../middlewares/validate.mdw')(wlSchema), async function (req, res) {
     try {
         const item = { ...req.body };
         item['user_id'] = req.accessTokenPayload.user_id;

@@ -1,0 +1,65 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://example.com/object1624611581.json",
+    "title": "Root",
+    "type": "object",
+    "required": [
+        "email",
+        "password",
+        "first_name",
+        "last_name",
+        "role"
+    ],
+    "properties": {
+        "email": {
+            "$id": "#root/email",
+            "title": "Email",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "test1@gmail.com"
+            ],
+            "format": "email"
+        },
+        "password": {
+            "$id": "#root/password",
+            "title": "Password",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "test1pass"
+            ],
+            "pattern": "^.*$"
+        },
+        "first_name": {
+            "$id": "#root/first_name",
+            "title": "First_name",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "Luyen"
+            ],
+            "pattern": "^.*$"
+        },
+        "last_name": {
+            "$id": "#root/last_name",
+            "title": "Last_name",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "Le Van"
+            ],
+            "pattern": "^.*$"
+        },
+        "role": {
+            "$id": "#root/role",
+            "title": "Role",
+            "type": "integer",
+            "examples": [
+                2
+            ],
+            "default": 0
+        }
+    }
+}

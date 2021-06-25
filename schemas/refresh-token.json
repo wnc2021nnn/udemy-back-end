@@ -1,0 +1,33 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1624612574.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"access_token",
+		"refresh_token"
+	],
+	"properties": {
+		"access_token": {
+			"$id": "#root/access_token", 
+			"title": "Access_token", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDliMGMwN2YtNGY0OS00ZGM1LWEwNzYtNGEwYmE2YmNkZDk3Iiwicm9sZSI6MiwiaWF0IjoxNjI0MjQxNzcxLCJleHAiOjE2MjQyNDIzNzF9.ngMIzEmBMLd5eMmOoKHK7khSXgTnVbE_f7mn5iCpoFw"
+			],
+			"pattern": "^.*$"
+		},
+		"refresh_token": {
+			"$id": "#root/refresh_token", 
+			"title": "Refresh_token", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"im29ehTD1KsBVaWQuDEwK01m17wEb0DN3d7a1ssPdaffzUSBnnGBi6DJCzF6SImKUb6ToCtcppuwvhVR"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}

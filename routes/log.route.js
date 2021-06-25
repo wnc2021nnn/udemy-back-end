@@ -43,7 +43,9 @@ const router = express.Router();
 
 // })
 
-router.put("/", async (req, res) => {
+const logSchema = require('../schemas/log.json');
+
+router.put("/", require('../middlewares/validate.mdw')(logSchema), async (req, res) => {
     try {
         const log = {
             ...req.body,

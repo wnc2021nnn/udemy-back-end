@@ -5,7 +5,8 @@ const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
-router.put('/', async function (req, res) {
+const userSchema = require('../schemas/user.json');
+router.put('/', require('../middlewares/validate.mdw')(userSchema), async function (req, res) {
     try {
         const user = { ...req.body };
         user.password = bcrypt.hashSync(user.password, 10);
@@ -28,7 +29,8 @@ router.put('/', async function (req, res) {
 
 })
 
-router.patch('/', require('../middlewares/auth.mdw'), async function (req, res) {
+const pUserSchema = require('../schemas/patch-user.json');
+router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('../middlewares/auth.mdw'), async function (req, res) {
     try {
         const userId = req.accessTokenPayload.user_id;
         const user = await userModel.single(userId);

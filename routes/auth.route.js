@@ -8,17 +8,20 @@ const userModel = require('../models/user.model');
 
 const router = express.Router();
 
-router.post('/', async function (req, res) {
+const signInSchema = require('../schemas/sign-in.json')
+router.post('/', require('../middlewares/validate.mdw')(signInSchema), async function (req, res) {
   const user = await userModel.singleByEmail(req.body.email);
   if (user === null) {
     return res.json({
-      status: false
+      status: false,
+      data: "User not found"
     });
   }
 
   if (!bcrypt.compareSync(req.body.password, user.password)) {
     return res.json({
-        status: false
+      status: false,
+      message: "wrong password"
     });
   }
 
@@ -29,7 +32,7 @@ router.post('/', async function (req, res) {
   const opts = {
     expiresIn: env.JWT_EXPIRES_IN // seconds
   }
-  const accessToken = jwt.sign(payload, env.JWT_SECRET_KEY , opts);
+  const accessToken = jwt.sign(payload, env.JWT_SECRET_KEY, opts);
 
   const refreshToken = randomstring.generate(80);
   await userModel.patchRFToken(user.user_id, refreshToken);
@@ -38,12 +41,13 @@ router.post('/', async function (req, res) {
   user['access_token'] = accessToken;
 
   return res.json({
-      "status": true,
-      "data": user,
+    "status": true,
+    "data": user,
   })
 })
 
-router.post('/refresh', async function (req, res) {
+const rfSchema = require('../schemas/refresh-token.json')
+router.post('/refresh', require('../middlewares/validate.mdw')(rfSchema), async function (req, res) {
   const { access_token, refresh_token } = req.body;
   const { user_id } = jwt.verify(access_token, env.JWT_SECRET_KEY, {
     ignoreExpiration: true
@@ -51,7 +55,7 @@ router.post('/refresh', async function (req, res) {
 
   const ret = await userModel.isValidRFToken(user_id, refresh_token);
   if (ret === true) {
-    const newAccessToken = jwt.sign({ user_id }, env.JWT_SECRET_KEY , { expiresIn: env.JWT_EXPIRES_IN });
+    const newAccessToken = jwt.sign({ user_id }, env.JWT_SECRET_KEY, { expiresIn: env.JWT_EXPIRES_IN });
     return res.json({
       data: newAccessToken
     });
