@@ -20,7 +20,7 @@ module.exports = {
     },
 
     async increaseRegistedCountByOne(courseId) {
-        const course = (await this.getDetailCouresById(courseId))[0];
+        const course = (await courseModel.getDetailCouresById(courseId))[0];
         if (course) {
             const registedCount = course.registed_count + 1;
             const result = await courseModel.updateRegistedCount(courseId, registedCount);
@@ -29,7 +29,7 @@ module.exports = {
     },
 
     async increaseViewCountByOne(courseId) {
-        const course = (await this.getDetailCouresById(courseId))[0];
+        const course = (await courseModel.getDetailCouresById(courseId))[0];
         if (course) {
             const viewCount = course.view_count + 1;
             const result = await courseModel.updateViewCount(courseId, viewCount);

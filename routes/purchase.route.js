@@ -1,6 +1,8 @@
 const express = require('express');
 const purchaseModel = require('../models/purchase.model')
 const { v4: uuidv4 } = require('uuid');
+const eventEmitter = require('../handlers/listeners/event-listener');
+const purchaseService = require('../services/purchase.service');
 
 const router = express.Router();
 
@@ -14,13 +16,14 @@ const router = express.Router();
 // })
 
 router.put("/", async (req, res) => {
-    const body = req.body;
-    const purchase = { ...body };
+    const purchase = { ...req.body };
     purchase["id"] = uuidv4();
     purchase["created_at"] = Date.now();
     purchase["user_id"] = req.accessTokenPayload.user_id;
     purchase["purchase_type"] = 'COURSE_PURCHASE';
-    await purchaseModel.add(purchase);
+
+    await purchaseService.createAPurchase(purchase);
+
     res.json({
         "meta": req.body,
         "data": purchase ?? null,
