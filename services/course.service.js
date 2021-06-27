@@ -4,6 +4,7 @@ const courseModel = require('../models/course.model');
 const purchaseModel = require('../models/purchase.model');
 const chapterModel = require('../models/chapter.model');
 const lessonModel = require('../models/lesson.model');
+const lessonLearningStateModel = require('../models/lesson-learning-state.model');
 
 module.exports = {
     async coursesViewedDesFromLastWeek(limit = 4) {
@@ -46,12 +47,27 @@ module.exports = {
         return courses;
     },
 
-    async getChaptersAndLessonsByCourse(courseId) {
+    async getChaptersAndLessonsByCourse(courseId, userId) {
         const chapters = await chapterModel.chaptersByCourse(courseId);
         const chapterIds = chapters.map((c) => c.chapter_id);
-        const lessons = await lessonModel.lessonsByChapters(chapterIds);
+        var lessons = await lessonModel.lessonsByChapters(chapterIds);
+
+        if (userId) {
+            const lessonIds = lessons.map((l) => l.lesson_id);
+            const states = await lessonLearningStateModel.getByLessonIdsAndUserId(lessonIds, userId);
+            states.forEach((state) => {
+                lessons = lessons.map((l) => {
+                    if (state.lesson_id === l.lesson_id) {
+                        l['current_video_secconds'] = state.current_video_secconds;
+                    }
+                    return l;
+                });
+            });
+        }
+
         return {
-            chapters,lessons
+            chapters,
+            lessons
         };
     }
 }

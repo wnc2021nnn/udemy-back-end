@@ -2,7 +2,7 @@ const express = require('express');
 const courseModel = require('../models/course.model');
 const couresModel = require('../models/course.model');
 const courseService = require('../services/course.service');
-
+const getAccessTokenPayload = require('../utils/get-access-token-payload')
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -85,10 +85,18 @@ router.get("/:id/related-courses", async (req, res) => {
 router.get("/:id/content", async (req, res) => {
     const courseId = req.params.id;
 
-    const content = await courseService.getChaptersAndLessonsByCourse(courseId);
+    var userId;
+
+    const atp = getAccessTokenPayload(req);
+
+    if (atp) {
+        userId = atp.user_id;
+    }
+
+    const content = await courseService.getChaptersAndLessonsByCourse(courseId, userId);
 
     res.json({
-        "data": content ?? null
+        "data": content ?? null,
     });
 })
 
