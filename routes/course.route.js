@@ -82,5 +82,14 @@ router.get("/:id/related-courses", async (req, res) => {
     }
 })
 
+router.get("/:id/content", async (req, res) => {
+    const courseId = req.params.id;
+
+    const content = await courseService.getChaptersAndLessonsByCourse(courseId);
+
+    res.json({
+        "data": content ?? null
+    });
+})
 
 module.exports = router;

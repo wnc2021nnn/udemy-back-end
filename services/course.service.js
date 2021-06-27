@@ -2,6 +2,8 @@ const topicModel = require('../models/topic.model')
 const logModel = require('../models/log.model')
 const courseModel = require('../models/course.model');
 const purchaseModel = require('../models/purchase.model');
+const chapterModel = require('../models/chapter.model');
+const lessonModel = require('../models/lesson.model');
 
 module.exports = {
     async coursesViewedDesFromLastWeek(limit = 4) {
@@ -42,5 +44,14 @@ module.exports = {
         const courseIds = purchases.map((p) => p.item_id);
         const courses = await courseModel.getCouresByIds(courseIds);
         return courses;
+    },
+
+    async getChaptersAndLessonsByCourse(courseId) {
+        const chapters = await chapterModel.chaptersByCourse(courseId);
+        const chapterIds = chapters.map((c) => c.chapter_id);
+        const lessons = await lessonModel.lessonsByChapters(chapterIds);
+        return {
+            chapters,lessons
+        };
     }
 }
