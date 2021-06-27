@@ -6,7 +6,6 @@ const router = express.Router();
 router.post('/fix-course-table', async (req, res) => {
     try {
         const courses = await courseModel.getAll();
-        const coursesIds = courses.map((course) => course.course_id);
 
         const now = Date.now();
 
@@ -30,8 +29,7 @@ router.post('/fix-course-table', async (req, res) => {
         });
 
         res.json({
-            "status": true,
-            "data": courses
+            "status": true
         });
     } catch (error) {
         console.log(error);

@@ -1,0 +1,21 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1624785521.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"current_video_secconds"
+	],
+	"properties": {
+		"current_video_secconds": {
+			"$id": "#root/current_video_secconds", 
+			"title": "Current_video_secconds", 
+			"type": "integer",
+			"examples": [
+				65
+			],
+			"default": 0
+		}
+	}
+}
