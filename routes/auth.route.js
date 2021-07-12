@@ -49,13 +49,19 @@ router.post('/', require('../middlewares/validate.mdw')(signInSchema), async fun
 const rfSchema = require('../schemas/refresh-token.json')
 router.post('/refresh', require('../middlewares/validate.mdw')(rfSchema), async function (req, res) {
   const { access_token, refresh_token } = req.body;
-  const { user_id } = jwt.verify(access_token, env.JWT_SECRET_KEY, {
+  const { user_id, role } = jwt.verify(access_token, env.JWT_SECRET_KEY, {
     ignoreExpiration: true
   });
 
   const ret = await userModel.isValidRFToken(user_id, refresh_token);
   if (ret === true) {
-    const newAccessToken = jwt.sign({ user_id }, env.JWT_SECRET_KEY, { expiresIn: env.JWT_EXPIRES_IN });
+
+    const payload = {
+      'user_id': user_id,
+      'role': role,
+    }
+
+    const newAccessToken = jwt.sign(payload, env.JWT_SECRET_KEY, { expiresIn: env.JWT_EXPIRES_IN });
     return res.json({
       data: newAccessToken
     });

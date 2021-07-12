@@ -2,6 +2,10 @@ const db = require('../utils/db');
 const TBL_COURSE = 'course'
 
 module.exports = {
+    createCourse(course){
+        return db(TBL_COURSE).insert(course);
+    },
+
     getCouresByTeacherId(teacherId) {
         return db(TBL_COURSE)
             // .select(

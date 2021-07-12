@@ -100,4 +100,19 @@ router.get("/:id/content", async (req, res) => {
     });
 })
 
+router.put("/", require('../middlewares/auth.mdw'), async (req, res) => {
+    try {
+        var course = req.body;
+        var result = await courseService.createACourse(req.accessTokenPayload.user_id, req.accessTokenPayload.role, course);
+        res.json({
+            "data": result
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            error,
+        });
+    }
+})
+
 module.exports = router;
