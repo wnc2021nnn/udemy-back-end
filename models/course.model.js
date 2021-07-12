@@ -2,6 +2,22 @@ const db = require('../utils/db');
 const TBL_COURSE = 'course'
 
 module.exports = {
+    getCouresByTeacherId(teacherId) {
+        return db(TBL_COURSE)
+            // .select(
+            //     [
+            //         `${TBL_COURSE}.*`,
+            //         'user.user_id as lecturer_id',
+            //         'user.first_name as lecturer_first_name',
+            //         'user.last_name as lecturer_last_name',
+            //     ]
+            // )
+            .where(
+                'lecturers_id', teacherId
+            )
+            // .innerJoin('user', 'course.lecturers_id', 'user.user_id');
+    },
+
     getAll() {
         return db(TBL_COURSE)
             .select(
