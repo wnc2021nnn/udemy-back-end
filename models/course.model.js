@@ -128,9 +128,9 @@ module.exports = {
             );
     },
 
-    update(courseId, createdAt) {
+    update(courseId, course) {
         return db(TBL_COURSE).where({ course_id: courseId })
-            .update({ created_at: createdAt }
+            .update(course
                 , ['course_id', 'created_at']
             );
     },

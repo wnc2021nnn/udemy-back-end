@@ -19,12 +19,37 @@ router.post('/fix-course-table', async (req, res) => {
 
             if (course.created_at == '0') {
                 console.log("created_at", course);
-                const res = await courseModel.update(courseId, createdAt);
+                const res = await courseModel.update(courseId, { created_at: createdAt });
             }
 
             if (course.updated_at == '0') {
                 console.log("updated_at", course);
                 const res = await courseModel.updateUpdatedAt(courseId, createdAt);
+            }
+        });
+
+        res.json({
+            "status": true
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+
+
+router.post('/mark-complete', async (req, res) => {
+    try {
+        const courses = await courseModel.getAll();
+
+
+        await courses.forEach(async course => {
+            const courseId = course.course_id;
+
+            if (!course.status) {
+                const res = await courseModel.update(courseId, {
+                    status: 'COMPLETE'
+                });
             }
         });
 
