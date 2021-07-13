@@ -81,5 +81,11 @@ module.exports = {
         course.updated_at = now;
         await courseModel.createCourse(course);
         return course;
+    },
+
+    async updateACourse(courseId, userId, userRole, course){
+        if (userRole != 1) throw 'You cannot update this course';
+        const result = await courseModel.updateCourse(courseId, userId, course);
+        return result;
     }
 }
