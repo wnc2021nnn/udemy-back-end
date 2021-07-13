@@ -45,8 +45,8 @@ router.get("/", async (req, res) => {
 })
 
 router.get("/my-courses", require('../middlewares/auth.mdw'), async (req, res) => {
-    const userId = req.accessTokenPayload.user_id;
-    const myCourses = await courseService.getUserPurchasedCourses(userId);
+    const user = req.accessTokenPayload;
+    const myCourses = await courseService.getMyCourses(user);
     res.json({
         "data": myCourses,
     })

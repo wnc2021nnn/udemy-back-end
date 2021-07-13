@@ -1,0 +1,69 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1626183275.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"course_id",
+		"chapters"
+	],
+	"properties": {
+		"course_id": {
+			"$id": "#root/course_id", 
+			"title": "Course_id", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"24227366-ccb7-4bb7-a0ba-5908fdc87e48"
+			],
+			"pattern": "^.*$"
+		},
+		"chapters": {
+			"$id": "#root/chapters", 
+			"title": "Chapters", 
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/chapters/items", 
+				"title": "Items", 
+				"type": "object",
+				"required": [
+					"chapter_id"
+				],
+				"properties": {
+					"index": {
+						"$id": "#root/chapters/items/index", 
+						"title": "Index", 
+						"type": "integer",
+						"examples": [
+							1
+						],
+						"default": 0
+					},
+					"title": {
+						"$id": "#root/chapters/items/title", 
+						"title": "Title", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Chapter 2: Tong quan"
+						],
+						"pattern": "^.*$"
+					},
+					"chapter_id": {
+						"$id": "#root/chapters/items/chapter_id", 
+						"title": "Chapter_id", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"5013c7ce-df7b-4008-97ca-1b682374a7b2"
+						],
+						"pattern": "^.*$"
+					}
+				}
+			}
+
+		}
+	}
+}

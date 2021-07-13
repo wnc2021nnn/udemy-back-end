@@ -41,6 +41,19 @@ module.exports = {
         }
     },
 
+    async getMyCourses(user) {
+        switch (user.role) {
+            case 1: //teacher
+                return await courseModel.getCouresByTeacherId(user.user_id);
+                break;
+            case 2: //student
+                return await getUserPurchasedCourses(user.user_id);
+                break;
+            default:
+                break;
+        }
+    },
+
     async getUserPurchasedCourses(userId) {
         const purchases = await purchaseModel.multiByUserIdAndType(userId, 'COURSE_PURCHASE');
         const courseIds = purchases.map((p) => p.item_id);
@@ -83,7 +96,7 @@ module.exports = {
         return course;
     },
 
-    async updateACourse(courseId, userId, userRole, course){
+    async updateACourse(courseId, userId, userRole, course) {
         if (userRole != 1) throw 'You cannot update this course';
         const result = await courseModel.updateCourse(courseId, userId, course);
         return result;
