@@ -71,7 +71,6 @@ module.exports = {
                 topic_id: topicId
             })
             .innerJoin('user', 'course.lecturers_id', 'user.user_id');
-
     },
 
     getTopRegistedCoursesByTopic(topicId, limit = 6) {
@@ -99,12 +98,14 @@ module.exports = {
                     'user.user_id as lecturer_id',
                     'user.first_name as lecturer_first_name',
                     'user.last_name as lecturer_last_name',
+                    'topic.title as topic_name',
                 ]
             )
             .where({
                 course_id: courseId
             })
-            .innerJoin('user', 'course.lecturers_id', 'user.user_id');
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+            .innerJoin('topic', 'course.topic_id', 'topic.topic_id');
     },
 
     getCouresByIds(courseIds) {
