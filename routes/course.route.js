@@ -100,4 +100,40 @@ router.get("/:id/content", async (req, res) => {
     });
 })
 
+const courseSchema = require('../schemas/course.json');
+router.put("/", require('../middlewares/auth.mdw'), require('../middlewares/validate.mdw')(courseSchema), async (req, res) => {
+    try {
+        var course = req.body;
+        var result = await courseService.createACourse(req.accessTokenPayload.user_id, req.accessTokenPayload.role, course);
+        res.json({
+            "data": result
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            error,
+        });
+    }
+})
+
+router.patch("/:id", require('../middlewares/auth.mdw'), require('../middlewares/validate.mdw')(courseSchema), async (req, res) => {
+    try {
+        var course = req.body;
+        var result = await courseService.updateACourse(
+            req.params.id,
+            req.accessTokenPayload.user_id,
+            req.accessTokenPayload.role,
+            course
+        );
+        res.json({
+            "data": result
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            error,
+        });
+    }
+})
+
 module.exports = router;

@@ -5,6 +5,7 @@ const purchaseModel = require('../models/purchase.model');
 const chapterModel = require('../models/chapter.model');
 const lessonModel = require('../models/lesson.model');
 const lessonLearningStateModel = require('../models/lesson-learning-state.model');
+const { v4 } = require('uuid');
 
 module.exports = {
     async coursesViewedDesFromLastWeek(limit = 4) {
@@ -69,5 +70,22 @@ module.exports = {
             chapters,
             lessons
         };
+    },
+
+    async createACourse(userId, userRole, course) {
+        if (userRole != 1) throw 'You cannot create course';
+        course.course_id = v4();
+        course.lecturers_id = userId;
+        const now = Date.now();
+        course.created_at = now;
+        course.updated_at = now;
+        await courseModel.createCourse(course);
+        return course;
+    },
+
+    async updateACourse(courseId, userId, userRole, course){
+        if (userRole != 1) throw 'You cannot update this course';
+        const result = await courseModel.updateCourse(courseId, userId, course);
+        return result;
     }
 }
