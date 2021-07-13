@@ -1,0 +1,60 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1626182725.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"course_id",
+		"chapters"
+	],
+	"properties": {
+		"course_id": {
+			"$id": "#root/course_id", 
+			"title": "Course_id", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"24227366-ccb7-4bb7-a0ba-5908fdc87e48"
+			],
+			"pattern": "^.*$"
+		},
+		"chapters": {
+			"$id": "#root/chapters", 
+			"title": "Chapters", 
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/chapters/items", 
+				"title": "Items", 
+				"type": "object",
+				"required": [
+					"index",
+					"title"
+				],
+				"properties": {
+					"index": {
+						"$id": "#root/chapters/items/index", 
+						"title": "Index", 
+						"type": "integer",
+						"examples": [
+							0
+						],
+						"default": 0
+					},
+					"title": {
+						"$id": "#root/chapters/items/title", 
+						"title": "Title", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Chapter 1: Gioi thieu khoa hoc"
+						],
+						"pattern": "^.*$"
+					}
+				}
+			}
+
+		}
+	}
+}

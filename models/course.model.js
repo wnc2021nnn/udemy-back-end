@@ -2,6 +2,19 @@ const db = require('../utils/db');
 const TBL_COURSE = 'course'
 
 module.exports = {
+    courseByTeacher(teacherId, courseId) {
+        return db(TBL_COURSE).where({
+            course_id: courseId,
+            lecturers_id: teacherId,
+        })
+    },
+
+    coursesByTeacher(teacherId) {
+        return db(TBL_COURSE).where({
+            lecturers_id: teacherId,
+        })
+    },
+
     createCourse(course) {
         return db(TBL_COURSE).insert(course);
     },
