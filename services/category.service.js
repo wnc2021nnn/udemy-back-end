@@ -1,3 +1,4 @@
+const { v4 } = require("uuid");
 const categoryModel = require("../models/category.model")
 const topicModel = require("../models/topic.model")
 
@@ -14,6 +15,19 @@ module.exports = {
                 "topics": topicsByCate
             }
         });
+
+        return categories;
+    },
+
+    async createCategories(categories) {
+        categories = categories.map((c) => {
+            return {
+                ...c,
+                'category_id': v4(),
+            }
+        });
+
+        await categoryModel.create(categories);
 
         return categories;
     }

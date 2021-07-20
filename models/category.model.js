@@ -11,5 +11,9 @@ module.exports = {
             .where({
                 category_id: cateId
             });
+    },
+    create(categories) {
+        return db(TBL_CATEGORY)
+            .insert(categories);
     }
 }

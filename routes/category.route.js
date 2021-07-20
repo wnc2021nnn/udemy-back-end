@@ -13,9 +13,9 @@ router.get('/', async function (req, res) {
             "status": "success",
             "data": categories,
         });
-    } catch (ex) {
-        console.log('Get all categories error', ex);
-        res.status(204, ex).send();
+    } catch (error) {
+        console.log('Get all categories error', error);
+        res.status(204, ex).json({ error });
     }
 });
 
@@ -27,6 +27,22 @@ router.get('/:categoryId', async function (req, res) {
         "meta": req.params,
         "data": listCategory[0] ?? null
     });
+});
+
+const authMdwV2 = require('../middlewares/auth.v2.mdw');
+router.put('/', authMdwV2(0), async function (req, res) {
+    try {
+        var categories = req.body.categories;
+        
+        const result = await categoryService.createCategories(categories);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log('Get all categories error', error);
+        res.status(403).json({ error });
+    }
 });
 
 module.exports = router;
