@@ -1,4 +1,5 @@
 const { v4 } = require("uuid");
+const eventEmitter = require("../handlers/listeners/event-listener");
 const courseReviewsModel = require("../models/course-reviews.model");
 const purchaseModel = require("../models/purchase.model");
 
@@ -11,6 +12,7 @@ module.exports = {
             review["course_review_id"] = v4();
             review["created_at"] = Date.now();
             await courseReviewsModel.add(review);
+            eventEmitter.emit('COURSE_REVIEW_ADDED', review);
         } else {
             throw 'Cannot add reviews, You have not purchased this course yet';
         }
