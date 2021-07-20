@@ -17,18 +17,24 @@ const router = express.Router();
 
 const pcSchema = require('../schemas/purchase.json');
 router.put("/", require('../middlewares/validate.mdw')(pcSchema), async (req, res) => {
-    const purchase = { ...req.body };
-    purchase["id"] = uuidv4();
-    purchase["created_at"] = Date.now();
-    purchase["user_id"] = req.accessTokenPayload.user_id;
-    purchase["purchase_type"] = 'COURSE_PURCHASE';
-
-    await purchaseService.createAPurchase(purchase);
-
-    res.json({
-        "meta": req.body,
-        "data": purchase ?? null,
-    });
+    try {
+        const purchase = { ...req.body };
+        purchase["id"] = uuidv4();
+        purchase["created_at"] = Date.now();
+        purchase["user_id"] = req.accessTokenPayload.user_id;
+        purchase["purchase_type"] = 'COURSE_PURCHASE';
+    
+        await purchaseService.createAPurchase(purchase);
+    
+        res.json({
+            "meta": req.body,
+            "data": purchase ?? null,
+        });
+    } catch (error) {
+        res.status(400).json({
+            error,
+        })
+    }
 })
 
 module.exports = router;
