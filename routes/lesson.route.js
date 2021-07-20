@@ -3,7 +3,6 @@ const lessonService = require('../services/lesson.service');
 const router = express.Router();
 
 const llsSchema = require('../schemas/lesson-learning-state.json')
-
 router.post('/:id/update-video-learning-state', require('../middlewares/validate.mdw')(llsSchema), async (req, res) => {
     try {
         const learningState = {
@@ -29,7 +28,6 @@ router.post('/:id/update-video-learning-state', require('../middlewares/validate
 })
 
 const clSchema = require('../schemas/create-lessons.json');
-
 router.put('/'
     , require('../middlewares/validate.mdw')(clSchema)
     , async (req, res) => {
@@ -51,5 +49,29 @@ router.put('/'
         }
 
     })
+
+const ulSchema = require('../schemas/update-lessons.json');
+router.patch('/'
+    , require('../middlewares/validate.mdw')(ulSchema)
+    , async (req, res) => {
+        try {
+            const user = req.accessTokenPayload;
+            const lessons = req.body.lessons;
+
+            const result = await lessonService.updateLessons(user, req.body.course_id, lessons);
+
+            res.json({
+                'data': true,
+            });
+        } catch (error) {
+            console.log(error);
+
+            res.status(400).json({
+                error,
+            });
+        }
+
+    })
+
 
 module.exports = router;

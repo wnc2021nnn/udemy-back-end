@@ -40,5 +40,18 @@ module.exports = {
         const res = await lessonModel.createLessons(lessons);
 
         return res;
+    },
+
+    async updateLessons(user, courseId, lessons) {
+        if (user.role != 1)
+            throw 'You do not have permission';
+
+        var courses = await courseModel.getDetailCouresById(courseId);
+
+        if (courses.length < 1) throw 'Course does not exist';
+
+        await lessons.forEach(async (lesson) => {
+            await lessonModel.updateLesson(lesson);
+        });
     }
 }
