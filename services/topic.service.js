@@ -1,6 +1,7 @@
 const topicModel = require('../models/topic.model')
 const logModel = require('../models/log.model')
 const courseModel = require('../models/course.model');
+const { v4 } = require('uuid');
 
 module.exports = {
     async topicRegistedTimesDesFrom(timeInMiliseconds) {
@@ -23,5 +24,41 @@ module.exports = {
                 registed_times,
             }
         });
+    },
+
+    async createTopics(topics) {
+        topics = topics.map((c) => {
+            return {
+                ...c,
+                'topic_id': v4(),
+            }
+        });
+
+        await topicModel.create(topics);
+
+        return topics;
+    },
+
+    async updateTopics(topics) {
+        for(const c of topics){
+            await topicModel.updateTopic(c);
+        }
+        return topics;
+    },
+
+    async deleteTopics(topicIds) {
+        var sucess = [];
+
+        for (const cid of topicIds) {
+            const courses = await courseModel.getCourseByTopic(cid);
+            if (courses.length <= 0) {
+                await topicModel.deleteTopics([cid]);
+                sucess.push(cid);
+            }
+        }
+
+        if (sucess.length < 1) throw 'Cannot delete topic, Try to delete courses first';
+
+        return sucess;
     }
 }

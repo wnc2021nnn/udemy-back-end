@@ -1,0 +1,50 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1626789140.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"topics"
+	],
+	"properties": {
+		"topics": {
+			"$id": "#root/topics", 
+			"title": "Topics", 
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/topics/items", 
+				"title": "Items", 
+				"type": "object",
+				"required": [
+					"category_id",
+					"title"
+				],
+				"properties": {
+					"category_id": {
+						"$id": "#root/topics/items/category_id", 
+						"title": "Category_id", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"60c7b77a-e8a7-4b14-9e93-d0490b57c6e2"
+						],
+						"pattern": "^.*$"
+					},
+					"title": {
+						"$id": "#root/topics/items/title", 
+						"title": "Title", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Learn to cook"
+						],
+						"pattern": "^.*$"
+					}
+				}
+			}
+
+		}
+	}
+}
