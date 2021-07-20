@@ -1,0 +1,81 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1626771034.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"course_id",
+		"lessons"
+	],
+	"properties": {
+		"course_id": {
+			"$id": "#root/course_id", 
+			"title": "Course_id", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"24227366-ccb7-4bb7-a0ba-5908fdc87e48"
+			],
+			"pattern": "^.*$"
+		},
+		"lessons": {
+			"$id": "#root/lessons", 
+			"title": "Lessons", 
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/lessons/items", 
+				"title": "Items", 
+				"type": "object",
+				"required": [
+					"chapter_id",
+					"index",
+					"title"
+				],
+				"properties": {
+					"chapter_id": {
+						"$id": "#root/lessons/items/chapter_id", 
+						"title": "Chapter_id", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"386bc952-8f79-47e6-a5d1-fc6332ae77fa"
+						],
+						"pattern": "^.*$"
+					},
+					"index": {
+						"$id": "#root/lessons/items/index", 
+						"title": "Index", 
+						"type": "integer",
+						"examples": [
+							2
+						],
+						"default": 0
+					},
+					"title": {
+						"$id": "#root/lessons/items/title", 
+						"title": "Title", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Lesson 2: Bai hoc 1 la gi"
+						],
+						"pattern": "^.*$"
+					},
+					"video_link": {
+						"$id": "#root/lessons/items/video_link", 
+						"title": "Video_link", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"https://www.youtube.com/watch?v=7fBpgLJ8-zA"
+						],
+						"pattern": "^.*$"
+					}
+				}
+			}
+
+		}
+	}
+}
