@@ -30,5 +30,12 @@ module.exports = {
         await categoryModel.create(categories);
 
         return categories;
+    },
+
+    async updateCategories(categories) {
+        await categories.forEach(async c => {
+            await categoryModel.updateCategory(c);
+        });
+        return categories;
     }
 }

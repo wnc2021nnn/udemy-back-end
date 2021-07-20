@@ -15,5 +15,10 @@ module.exports = {
     create(categories) {
         return db(TBL_CATEGORY)
             .insert(categories);
+    },
+    updateCategory(category) {
+        return db(TBL_CATEGORY)
+            .where('category_id', category.category_id)
+            .update(category);
     }
 }

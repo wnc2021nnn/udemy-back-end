@@ -30,10 +30,12 @@ router.get('/:categoryId', async function (req, res) {
 });
 
 const authMdwV2 = require('../middlewares/auth.v2.mdw');
-router.put('/', authMdwV2(0), async function (req, res) {
+const validateMdw = require('../middlewares/validate.mdw');
+const ccSchema = require('../schemas/create-categories.json')
+router.put('/', authMdwV2(0), validateMdw(ccSchema), async function (req, res) {
     try {
         var categories = req.body.categories;
-        
+
         const result = await categoryService.createCategories(categories);
 
         res.json({
@@ -45,4 +47,18 @@ router.put('/', authMdwV2(0), async function (req, res) {
     }
 });
 
+router.patch('/', authMdwV2(0), async function (req, res) {
+    try {
+        var categories = req.body.categories;
+
+        const result = await categoryService.updateCategories(categories);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
+});
 module.exports = router;
