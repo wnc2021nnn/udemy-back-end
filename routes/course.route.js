@@ -116,24 +116,47 @@ router.put("/", require('../middlewares/auth.mdw'), require('../middlewares/vali
     }
 })
 
-router.patch("/:id", require('../middlewares/auth.mdw'), require('../middlewares/validate.mdw')(courseSchema), async (req, res) => {
-    try {
-        var course = req.body;
-        var result = await courseService.updateACourse(
-            req.params.id,
-            req.accessTokenPayload.user_id,
-            req.accessTokenPayload.role,
-            course
-        );
-        res.json({
-            "data": result
-        });
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-            error,
-        });
-    }
-})
+router.patch("/:id"
+    , require('../middlewares/auth.v2.mdw')(1)
+    , require('../middlewares/validate.mdw')(courseSchema)
+    , async (req, res) => {
+        try {
+            var course = req.body;
+            var result = await courseService.updateACourse(
+                req.params.id,
+                course
+            );
+            res.json({
+                "data": result
+            });
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                error,
+            });
+        }
+    })
 
+const ucsSchema = require('../schemas/update-course-state.json')
+router.patch("/:id/state"
+    , require('../middlewares/auth.v2.mdw')(0)
+    , require('../middlewares/validate.mdw')(ucsSchema)
+    , async (req, res) => {
+        try {
+            var course = req.body;
+            var result = await courseService.updateACourse(
+                req.params.id,
+                course
+            );
+            res.json({
+                "data": result
+            });
+        } catch (error) {
+            console.log(error)
+            res.status(403).json({
+                error,
+            });
+        }
+    })
+    
 module.exports = router;

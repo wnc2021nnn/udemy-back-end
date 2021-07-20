@@ -62,4 +62,28 @@ router.post('/mark-complete', async (req, res) => {
 
 })
 
+router.post('/mark-enabled', async (req, res) => {
+    try {
+        const courses = await courseModel.getAll();
+
+
+        await courses.forEach(async course => {
+            const courseId = course.course_id;
+
+            if (!course.status) {
+                const res = await courseModel.update(courseId, {
+                    state: 'ENABLED'
+                });
+            }
+        });
+
+        res.json({
+            "status": true
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+
 module.exports = router;

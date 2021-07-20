@@ -110,8 +110,7 @@ module.exports = {
         return course;
     },
 
-    async updateACourse(courseId, userId, userRole, course) {
-        if (userRole != 1) throw 'You cannot update this course';
+    async updateACourse(courseId, course) {
         const result = await courseModel.updateCourse(courseId, course);
         return result;
     }
