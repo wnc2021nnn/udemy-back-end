@@ -18,4 +18,9 @@ eventEmitter.addListener('COURSE_REGISTED', async (log) => {
     console.log("COURSE_REGISTED", res);
 })
 
+eventEmitter.addListener('COURSE_REVIEW_ADDED', async (review) => {
+    const res = await courseService.increaseReviewCountByOne(review.course_id, review.rating);
+    console.log("COURSE_REVIEW_ADDED increaseReviewCountByOne", res);
+})
+
 module.exports = eventEmitter;

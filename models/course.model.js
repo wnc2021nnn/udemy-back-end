@@ -19,11 +19,10 @@ module.exports = {
         return db(TBL_COURSE).insert(course);
     },
 
-    updateCourse(courseId, teacherId, course) {
+    updateCourse(courseId, course) {
         return db(TBL_COURSE)
             .where({
-                course_id: courseId,
-                lecturers_id: teacherId
+                course_id: courseId
             })
             .update(course);
     },

@@ -41,6 +41,19 @@ module.exports = {
         }
     },
 
+    async increaseReviewCountByOne(courseId, rating) {
+        const course = (await courseModel.getDetailCouresById(courseId))[0];
+        if (course) {
+            const newRatingTotal = course.rating_total + 1;
+            const newRating = ((course.rating ?? 0) * course.rating_total + rating) / newRatingTotal;
+            const result = await courseModel.updateCourse(courseId, {
+                'rating_total': newRatingTotal,
+                'rating': newRating,
+            });
+            return result;
+        }
+    },
+
     async getMyCourses(user) {
         switch (user.role) {
             case 1: //teacher
@@ -98,7 +111,7 @@ module.exports = {
 
     async updateACourse(courseId, userId, userRole, course) {
         if (userRole != 1) throw 'You cannot update this course';
-        const result = await courseModel.updateCourse(courseId, userId, course);
+        const result = await courseModel.updateCourse(courseId, course);
         return result;
     }
 }
