@@ -20,5 +20,10 @@ module.exports = {
         return db(TBL_CATEGORY)
             .where('category_id', category.category_id)
             .update(category);
+    },
+    deleteCategories(categoryIds) {
+        return db(TBL_CATEGORY)
+            .whereIn('category_id', categoryIds)
+            .del();
     }
 }

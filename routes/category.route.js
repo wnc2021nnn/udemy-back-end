@@ -47,7 +47,8 @@ router.put('/', authMdwV2(0), validateMdw(ccSchema), async function (req, res) {
     }
 });
 
-router.patch('/', authMdwV2(0), async function (req, res) {
+const ucSchema = require('../schemas/update-categories.json')
+router.patch('/', authMdwV2(0), validateMdw(ucSchema), async function (req, res) {
     try {
         var categories = req.body.categories;
 
@@ -61,4 +62,20 @@ router.patch('/', authMdwV2(0), async function (req, res) {
         res.status(403).json({ error });
     }
 });
+
+router.delete('/', authMdwV2(0), async function (req, res) {
+    try {
+        var categoryIds = req.body.category_ids;
+
+        const result = await categoryService.deleteCategories(categoryIds);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
+});
+
 module.exports = router;
