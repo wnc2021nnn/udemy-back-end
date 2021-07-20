@@ -72,9 +72,9 @@ router.patch('/', authMdwV2(0), validateMdw(utSchema), async function (req, res)
 
 router.delete('/', authMdwV2(0), async function (req, res) {
     try {
-        var categoryIds = req.body.category_ids;
+        var topicIds = req.body.topic_ids;
 
-        const result = await categoryService.deleteCategories(categoryIds);
+        const result = await topicService.deleteTopics(topicIds);
 
         res.json({
             "data": result,

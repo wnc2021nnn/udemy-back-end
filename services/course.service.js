@@ -86,6 +86,7 @@ module.exports = {
                 lessons = lessons.map((l) => {
                     if (state.lesson_id === l.lesson_id) {
                         l['current_video_secconds'] = state.current_video_secconds;
+                        l['current_video_secconds_updated_at'] = state.updated_at;
                     }
                     return l;
                 });

@@ -46,18 +46,18 @@ module.exports = {
         return topics;
     },
 
-    async deleteCategories(categoryIds) {
+    async deleteTopics(topicIds) {
         var sucess = [];
 
-        for (const cid of categoryIds) {
-            const topics = await topicModel.getTopicByCateId(cid);
-            if (topics.length <= 0) {
-                await categoryModel.deleteCategories([cid]);
+        for (const cid of topicIds) {
+            const courses = await courseModel.getCourseByTopic(cid);
+            if (courses.length <= 0) {
+                await topicModel.deleteTopics([cid]);
                 sucess.push(cid);
             }
         }
 
-        if (sucess.length < 1) throw 'Cannot delete category, Try to delete topic first';
+        if (sucess.length < 1) throw 'Cannot delete topic, Try to delete courses first';
 
         return sucess;
     }
