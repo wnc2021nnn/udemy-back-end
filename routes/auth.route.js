@@ -12,14 +12,14 @@ const signInSchema = require('../schemas/sign-in.json')
 router.post('/', require('../middlewares/validate.mdw')(signInSchema), async function (req, res) {
   const user = await userModel.singleByEmail(req.body.email);
   if (user === null) {
-    return res.json({
+    return res.status(404).json({
       status: false,
       data: "User not found"
     });
   }
 
   if (!bcrypt.compareSync(req.body.password, user.password)) {
-    return res.json({
+    return res.status(404).json({
       status: false,
       message: "wrong password"
     });
