@@ -47,7 +47,7 @@ module.exports = {
                 return await courseModel.getCouresByTeacherId(user.user_id);
                 break;
             case 2: //student
-                return await getUserPurchasedCourses(user.user_id);
+                return await this.getUserPurchasedCourses(user.user_id);
                 break;
             default:
                 break;
