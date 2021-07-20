@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
     var listTopic = [];
 
     if (sort && sort === 'register_des') {
-        listTopic = await topicService.topicRegistedTimesDesFrom(Date.now() - 7*24*60*60*1000)
+        listTopic = await topicService.topicRegistedTimesDesFrom(Date.now() - 7 * 24 * 60 * 60 * 1000)
     } else if (categoryId) {
         listTopic = await topicModel.getTopicByCateId(categoryId);
     } else {
@@ -33,5 +33,57 @@ router.get("/:topicId", async (req, res) => {
         "data": topicItems[0] ?? null,
     });
 })
+
+const authMdwV2 = require('../middlewares/auth.v2.mdw');
+const validateMdw = require('../middlewares/validate.mdw');
+const ctSchema = require('../schemas/create-topics.json')
+router.put('/', authMdwV2(0)
+    , validateMdw(ctSchema)
+    , async function (req, res) {
+        try {
+            var topics = req.body.topics;
+
+            const result = await topicService.createTopics(topics);
+
+            res.json({
+                "data": result,
+            });
+        } catch (error) {
+            console.log('Get all categories error', error);
+            res.status(403).json({ error });
+        }
+    });
+
+const utSchema = require('../schemas/update-topics.json')
+router.patch('/', authMdwV2(0), validateMdw(utSchema), async function (req, res) {
+    try {
+        var topics = req.body.topics;
+
+        const result = await topicService.updateTopics(topics);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
+});
+
+router.delete('/', authMdwV2(0), async function (req, res) {
+    try {
+        var categoryIds = req.body.category_ids;
+
+        const result = await categoryService.deleteCategories(categoryIds);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
+});
+
 
 module.exports = router;

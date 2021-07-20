@@ -22,5 +22,19 @@ module.exports = {
         return db(TBL_TOPIC).whereIn(
             'category_id', categorieIds
         );
+    },
+    create(topics) {
+        return db(TBL_TOPIC)
+            .insert(topics);
+    },
+    updateTopic(topic) {
+        return db(TBL_TOPIC)
+            .where('topic_id', topic.topic_id)
+            .update(topic);
+    },
+    deleteTopics(topicIds) {
+        return db(TBL_TOPIC)
+            .whereIn('topic_id', topicIds)
+            .del();
     }
 }
