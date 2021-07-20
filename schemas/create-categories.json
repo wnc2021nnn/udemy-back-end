@@ -1,0 +1,39 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1626774334.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"categories"
+	],
+	"properties": {
+		"categories": {
+			"$id": "#root/categories", 
+			"title": "Categories", 
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/categories/items", 
+				"title": "Items", 
+				"type": "object",
+				"required": [
+					"title"
+				],
+				"properties": {
+					"title": {
+						"$id": "#root/categories/items/title", 
+						"title": "Title", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Self Learning"
+						],
+						"pattern": "^.*$"
+					}
+				}
+			}
+
+		}
+	}
+}

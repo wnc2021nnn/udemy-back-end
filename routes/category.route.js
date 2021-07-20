@@ -13,9 +13,9 @@ router.get('/', async function (req, res) {
             "status": "success",
             "data": categories,
         });
-    } catch (ex) {
-        console.log('Get all categories error', ex);
-        res.status(204, ex).send();
+    } catch (error) {
+        console.log('Get all categories error', error);
+        res.status(204, ex).json({ error });
     }
 });
 
@@ -27,6 +27,55 @@ router.get('/:categoryId', async function (req, res) {
         "meta": req.params,
         "data": listCategory[0] ?? null
     });
+});
+
+const authMdwV2 = require('../middlewares/auth.v2.mdw');
+const validateMdw = require('../middlewares/validate.mdw');
+const ccSchema = require('../schemas/create-categories.json')
+router.put('/', authMdwV2(0), validateMdw(ccSchema), async function (req, res) {
+    try {
+        var categories = req.body.categories;
+
+        const result = await categoryService.createCategories(categories);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log('Get all categories error', error);
+        res.status(403).json({ error });
+    }
+});
+
+const ucSchema = require('../schemas/update-categories.json')
+router.patch('/', authMdwV2(0), validateMdw(ucSchema), async function (req, res) {
+    try {
+        var categories = req.body.categories;
+
+        const result = await categoryService.updateCategories(categories);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
+});
+
+router.delete('/', authMdwV2(0), async function (req, res) {
+    try {
+        var categoryIds = req.body.category_ids;
+
+        const result = await categoryService.deleteCategories(categoryIds);
+
+        res.json({
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
 });
 
 module.exports = router;

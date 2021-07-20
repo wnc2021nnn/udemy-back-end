@@ -35,12 +35,11 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
         delete user.password;
 
         res.status(201).json({
-            "meta": req.body,
             "data": user
         });
     } catch (ex) {
-        res.status(400).send({
-            "meta": req.body,
+        console.log(ex)
+        res.status(400).json({
             "data": ex
         });
     }

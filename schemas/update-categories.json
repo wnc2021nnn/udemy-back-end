@@ -1,0 +1,50 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1626774977.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"categories"
+	],
+	"properties": {
+		"categories": {
+			"$id": "#root/categories", 
+			"title": "Categories", 
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/categories/items", 
+				"title": "Items", 
+				"type": "object",
+				"required": [
+					"category_id",
+					"title"
+				],
+				"properties": {
+					"category_id": {
+						"$id": "#root/categories/items/category_id", 
+						"title": "Category_id", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"832b60e3-9d75-48cc-9466-6cb0f9a009bc"
+						],
+						"pattern": "^.*$"
+					},
+					"title": {
+						"$id": "#root/categories/items/title", 
+						"title": "Title", 
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Self Learning Master"
+						],
+						"pattern": "^.*$"
+					}
+				}
+			}
+
+		}
+	}
+}

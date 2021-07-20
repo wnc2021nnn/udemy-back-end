@@ -11,5 +11,19 @@ module.exports = {
             .where({
                 category_id: cateId
             });
+    },
+    create(categories) {
+        return db(TBL_CATEGORY)
+            .insert(categories);
+    },
+    updateCategory(category) {
+        return db(TBL_CATEGORY)
+            .where('category_id', category.category_id)
+            .update(category);
+    },
+    deleteCategories(categoryIds) {
+        return db(TBL_CATEGORY)
+            .whereIn('category_id', categoryIds)
+            .del();
     }
 }
