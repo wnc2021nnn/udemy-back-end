@@ -28,4 +28,28 @@ router.post('/:id/update-video-learning-state', require('../middlewares/validate
 
 })
 
+const clSchema = require('../schemas/create-lessons.json');
+
+router.put('/'
+    , require('../middlewares/validate.mdw')(clSchema)
+    , async (req, res) => {
+        try {
+            const user = req.accessTokenPayload;
+            const lessons = req.body.lessons;
+
+            const result = await lessonService.createLessons(user, req.body.course_id, lessons);
+
+            res.json({
+                'data': result,
+            });
+        } catch (error) {
+            console.log(error);
+
+            res.status(400).json({
+                error,
+            });
+        }
+
+    })
+
 module.exports = router;

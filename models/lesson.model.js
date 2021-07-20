@@ -6,4 +6,8 @@ module.exports = {
         return db(TBL_LESSON)
             .whereIn('chapter_id', chapterIds);
     },
+    createLessons(lessons) {
+        return db(TBL_LESSON)
+            .insert(lessons);
+    }
 }
