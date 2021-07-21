@@ -6,7 +6,11 @@ module.exports = requiredRole => (req, res, next) => {
   if (accessToken) {
     try {
       const decoded = jwt.verify(accessToken, env.JWT_SECRET_KEY);
-      if (decoded.role != requiredRole) {
+      if (decoded.state != 'ENABLED') {
+        return res.status(403).json({
+          message: 'Account is deleted/disabled'
+        });
+      } else if (decoded.role != requiredRole) {
         return res.status(403).json({
           message: 'Invalid permission!'
         });

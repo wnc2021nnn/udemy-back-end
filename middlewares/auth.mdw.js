@@ -6,8 +6,14 @@ module.exports = function (req, res, next) {
   if (accessToken) {
     try {
       const decoded = jwt.verify(accessToken, env.JWT_SECRET_KEY);
-      req.accessTokenPayload = decoded;
-      next();
+      if (decoded.state != 'ENABLED') {
+        return res.status(403).json({
+          message: 'Account is deleted/disabled'
+        });
+      } else {
+        req.accessTokenPayload = decoded;
+        next();
+      }
     } catch (err) {
       console.log(err);
       return res.status(401).json({
