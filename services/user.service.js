@@ -18,5 +18,13 @@ module.exports = {
             user.students_count = students_count;
         }
         return user;
+    },
+    async getUsersByRole(role){
+        var users = await userModel.getUsersByRole(role);
+        users.map((c) => {
+            delete c.password;
+            delete c.refresh_token;
+        });
+        return users;
     }
 }

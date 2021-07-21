@@ -5,6 +5,28 @@ const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
+router.get('/', require('../middlewares/auth.v2.mdw')(0), async function (req, res) {
+    try {
+        const role = req.query.role;
+
+        var users = [];
+
+        if (role) {
+            users = await userService.getUsersByRole(role);
+        }
+
+        res.status(201).json({
+            "data": users
+        });
+    } catch (ex) {
+        console.log(ex)
+        res.status(403).send({
+            "data": ex
+        });
+    }
+
+})
+
 router.get('/:id', async function (req, res) {
     try {
         const id = req.params.id;
@@ -48,6 +70,7 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
 
 const pUserSchema = require('../schemas/patch-user.json');
 const userService = require('../services/user.service');
+const { route } = require('./course.route');
 router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('../middlewares/auth.mdw'), async function (req, res) {
     try {
         const userId = req.accessTokenPayload.user_id;
