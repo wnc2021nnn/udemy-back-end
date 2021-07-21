@@ -27,7 +27,8 @@ router.post('/', require('../middlewares/validate.mdw')(signInSchema), async fun
 
   const payload = {
     user_id: user.user_id,
-    role: user.role
+    role: user.role,
+    state: user.state,
   }
   const opts = {
     expiresIn: env.JWT_EXPIRES_IN // seconds
@@ -49,7 +50,7 @@ router.post('/', require('../middlewares/validate.mdw')(signInSchema), async fun
 const rfSchema = require('../schemas/refresh-token.json')
 router.post('/refresh', require('../middlewares/validate.mdw')(rfSchema), async function (req, res) {
   const { access_token, refresh_token } = req.body;
-  const { user_id, role } = jwt.verify(access_token, env.JWT_SECRET_KEY, {
+  const { user_id, role, state } = jwt.verify(access_token, env.JWT_SECRET_KEY, {
     ignoreExpiration: true
   });
 
@@ -59,6 +60,7 @@ router.post('/refresh', require('../middlewares/validate.mdw')(rfSchema), async 
     const payload = {
       'user_id': user_id,
       'role': role,
+      'state': state,
     }
 
     const newAccessToken = jwt.sign(payload, env.JWT_SECRET_KEY, { expiresIn: env.JWT_EXPIRES_IN });
