@@ -52,6 +52,7 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
         user.password = bcrypt.hashSync(user.password, 10);
         user.user_id = uuidv4();
         user.created_at = Date.now();
+        user.state = 'ENABLED';
         await userModel.add(user);
 
         delete user.password;
@@ -113,4 +114,21 @@ router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('
     }
 
 })
+
+router.delete('/', require('../middlewares/auth.v2.mdw')(0), async function (req, res) {
+    try {
+        const userIds = req.body.user_ids;
+        var result = await userService.deleteUsers(userIds);
+        res.status(201).json({
+            "data": result
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(403).json({
+            error
+        });
+    }
+
+})
+
 module.exports = router;

@@ -25,6 +25,14 @@ module.exports = {
       );
   },
 
+  setUsersState(userIds, state) {
+    return db(TBL_USER)
+      .whereIn('user_id', userIds)
+      .update({
+        'state': state,
+      });
+  },
+
   async singleByEmail(email) {
     const users = await db(TBL_USER).where('email', email);
     if (users.length === 0) {
