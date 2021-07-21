@@ -70,7 +70,7 @@ router.post('/mark-enabled', async (req, res) => {
         await courses.forEach(async course => {
             const courseId = course.course_id;
 
-            if (!course.status) {
+            if (!course.state) {
                 const res = await courseModel.update(courseId, {
                     state: 'ENABLED'
                 });

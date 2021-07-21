@@ -5,6 +5,28 @@ const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
+router.get('/', require('../middlewares/auth.v2.mdw')(0), async function (req, res) {
+    try {
+        const role = req.query.role;
+
+        var users = [];
+
+        if (role) {
+            users = await userService.getUsersByRole(role);
+        }
+
+        res.status(201).json({
+            "data": users
+        });
+    } catch (ex) {
+        console.log(ex)
+        res.status(403).send({
+            "data": ex
+        });
+    }
+
+})
+
 router.get('/:id', async function (req, res) {
     try {
         const id = req.params.id;
@@ -30,6 +52,7 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
         user.password = bcrypt.hashSync(user.password, 10);
         user.user_id = uuidv4();
         user.created_at = Date.now();
+        user.state = 'ENABLED';
         await userModel.add(user);
 
         delete user.password;
@@ -48,6 +71,7 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
 
 const pUserSchema = require('../schemas/patch-user.json');
 const userService = require('../services/user.service');
+const { route } = require('./course.route');
 router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('../middlewares/auth.mdw'), async function (req, res) {
     try {
         const userId = req.accessTokenPayload.user_id;
@@ -90,4 +114,21 @@ router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('
     }
 
 })
+
+router.delete('/', require('../middlewares/auth.v2.mdw')(0), async function (req, res) {
+    try {
+        const userIds = req.body.user_ids;
+        var result = await userService.deleteUsers(userIds);
+        res.status(201).json({
+            "data": result
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(403).json({
+            error
+        });
+    }
+
+})
+
 module.exports = router;

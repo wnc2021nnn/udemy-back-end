@@ -106,6 +106,7 @@ module.exports = {
         const now = Date.now();
         course.created_at = now;
         course.updated_at = now;
+        course.state = 'ENABLED';
         await courseModel.createCourse(course);
         return course;
     },

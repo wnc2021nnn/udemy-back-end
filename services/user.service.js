@@ -6,7 +6,6 @@ module.exports = {
         var user = await userModel.single(id);
         delete user.password;
         delete user.refresh_token;
-        delete user.email;
         if (user.role == 1) { //1 Teacher
             const courses = await courseModel.getCouresByTeacherId(user.user_id);
             user.courses_count = courses.length;
@@ -18,5 +17,17 @@ module.exports = {
             user.students_count = students_count;
         }
         return user;
+    },
+    async getUsersByRole(role) {
+        var users = await userModel.getUsersByRole(role);
+        users.map((c) => {
+            delete c.password;
+            delete c.refresh_token;
+        });
+        return users;
+    },
+    async deleteUsers(userIds) {
+        var res = await userModel.setUsersState(userIds, 'DISABLED');
+        return res;
     }
 }
