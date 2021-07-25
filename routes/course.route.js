@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
     const query = req.query.search;
     const sort = req.query.sort;
     const limit = req.query.limit;
+    const page = req.query.page;
 
     var listCourse = [];
 
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
         listCourse = await courseService.coursesViewedDesFromLastWeek();
     } else {
         if (topicId) {
-            listCourse = await couresModel.getCourseByTopic(topicId);
+            listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
         } else if (query) {
             listCourse = await couresModel.searchCourse(query);
         } else {
