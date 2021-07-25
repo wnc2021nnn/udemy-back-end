@@ -56,20 +56,38 @@ module.exports = {
             .innerJoin('user', 'course.lecturers_id', 'user.user_id');
     },
 
-    getCourseByTopic(topicId) {
-        return db(TBL_COURSE)
-            .select(
-                [
-                    `${TBL_COURSE}.*`,
-                    'user.user_id as lecturer_id',
-                    'user.first_name as lecturer_first_name',
-                    'user.last_name as lecturer_last_name',
-                ]
-            )
-            .where({
-                topic_id: topicId
-            })
-            .innerJoin('user', 'course.lecturers_id', 'user.user_id');
+    getCourseByTopic(topicId, page, limit) {
+        if (page && limit) {
+            return db(TBL_COURSE)
+                .select(
+                    [
+                        `${TBL_COURSE}.*`,
+                        'user.user_id as lecturer_id',
+                        'user.first_name as lecturer_first_name',
+                        'user.last_name as lecturer_last_name',
+                    ]
+                )
+                .where({
+                    topic_id: topicId
+                })
+                .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+                .limit(limit)
+                .offset((page - 1) * limit);
+        } else {
+            return db(TBL_COURSE)
+                .select(
+                    [
+                        `${TBL_COURSE}.*`,
+                        'user.user_id as lecturer_id',
+                        'user.first_name as lecturer_first_name',
+                        'user.last_name as lecturer_last_name',
+                    ]
+                )
+                .where({
+                    topic_id: topicId
+                })
+                .innerJoin('user', 'course.lecturers_id', 'user.user_id');
+        }
     },
 
     getTopRegistedCoursesByTopic(topicId, limit = 6) {
