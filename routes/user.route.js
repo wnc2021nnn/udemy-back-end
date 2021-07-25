@@ -49,17 +49,23 @@ const userSchema = require('../schemas/user.json');
 router.put('/', require('../middlewares/validate.mdw')(userSchema), async function (req, res) {
     try {
         const user = { ...req.body };
-        user.password = bcrypt.hashSync(user.password, 10);
-        user.user_id = uuidv4();
-        user.created_at = Date.now();
-        user.state = 'ENABLED';
-        await userModel.add(user);
+        if (user.role != 2) {
+            res.status(400).json({
+                "error": "Learner role must be 2",
+            });
+        } else {
+            user.password = bcrypt.hashSync(user.password, 10);
+            user.user_id = uuidv4();
+            user.created_at = Date.now();
+            user.state = 'ENABLED';
+            await userModel.add(user);
 
-        delete user.password;
+            delete user.password;
 
-        res.status(201).json({
-            "data": user
-        });
+            res.status(201).json({
+                "data": user
+            });
+        }
     } catch (ex) {
         console.log(ex)
         res.status(400).json({
@@ -68,6 +74,32 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
     }
 
 })
+
+router.put('/teachers'
+    , require('../middlewares/auth.v2.mdw')(0)
+    , require('../middlewares/validate.mdw')(userSchema)
+    , async function (req, res) {
+        try {
+            const user = { ...req.body };
+            user.password = bcrypt.hashSync(user.password, 10);
+            user.user_id = uuidv4();
+            user.created_at = Date.now();
+            user.state = 'ENABLED';
+            await userModel.add(user);
+
+            delete user.password;
+
+            res.status(201).json({
+                "data": user
+            });
+        } catch (ex) {
+            console.log(ex)
+            res.status(400).json({
+                "data": ex
+            });
+        }
+
+    })
 
 const pUserSchema = require('../schemas/patch-user.json');
 const userService = require('../services/user.service');
