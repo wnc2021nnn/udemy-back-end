@@ -1,6 +1,7 @@
 const { v4 } = require("uuid");
 const otpModel = require("../models/otp.model");
-const userModel = require("../models/user.model")
+const userModel = require("../models/user.model");
+const mailService = require("./mail.service");
 
 module.exports = {
     getRandomInt(min, max) {
@@ -32,5 +33,17 @@ module.exports = {
         })
 
         return true;
+    },
+
+    async resendOtp(user) {
+        const dbUser = await userModel.single(user.user_id);
+
+        const otp = await this.createOtp();
+
+        await mailService.sendRegistationOTPEmail(dbUser, otp);
+
+        delete otp.code;
+        
+        return otp;
     }
 }

@@ -24,4 +24,23 @@ router.post('/verify-email', require('../middlewares/auth.v2.mdw')(-1, true), as
 
 })
 
+router.post('/resend', require('../middlewares/auth.v2.mdw')(-1, true), async (req, res) => {
+    try {
+        const user = req.accessTokenPayload;
+
+        const result = await otpService.resendOtp(user);
+
+        res.json({
+            "status": true,
+            "data": result
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            error,
+        });
+    }
+
+})
+
 module.exports = router;
