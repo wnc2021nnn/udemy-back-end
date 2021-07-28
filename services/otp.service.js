@@ -1,5 +1,6 @@
 const { v4 } = require("uuid");
 const otpModel = require("../models/otp.model");
+const userModel = require("../models/user.model")
 
 module.exports = {
     getRandomInt(min, max) {
@@ -15,7 +16,21 @@ module.exports = {
             created_at: Date.now(),
         }
         await otpModel.add(otp);
-        
+
         return otp;
+    },
+
+    async verifyOtp(user, otp) {
+        const otps = await otpModel.getByIdAndCode(otp.id, otp.code);
+        if (otps.length < 1) {
+            throw false;
+        }
+        await otpModel.deleteByIdAndCode(otp.id, otp.code);
+
+        await userModel.patchUser(user.user_id, {
+            'email_verified': true,
+        })
+
+        return true;
     }
 }

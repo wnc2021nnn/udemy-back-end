@@ -46,6 +46,10 @@ module.exports = {
     return db(TBL_USER).insert(user);
   },
 
+  patchUser(id, user) {
+    return db(TBL_USER).where('user_id', id).update(user);
+  },
+
   patchPassword(id, password) {
     return db(TBL_USER).where('user_id', id).update('password', password);
   },
