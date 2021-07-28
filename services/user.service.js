@@ -11,15 +11,21 @@ module.exports = {
         user.user_id = v4();
         user.created_at = Date.now();
         user.state = 'ENABLED';
-        //await userModel.add(user);
+        await userModel.add(user);
 
         delete user.password;
 
         const otp = await otpService.createOtp();
 
-        user.otp = otp;
+        const copyOtp = {
+            ...otp,
+        }
 
-        eventEmitter.emit('USER_REGISTED', user);
+        delete copyOtp.code;
+
+        user.otp = copyOtp;
+
+        eventEmitter.emit('USER_REGISTED', user, otp);
 
         return user;
     },
