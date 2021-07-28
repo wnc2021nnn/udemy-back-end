@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const userModel = require('../models/user.model');
 const { v4: uuidv4 } = require('uuid');
-
 const router = express.Router();
 
 router.get('/', require('../middlewares/auth.v2.mdw')(0), async function (req, res) {
@@ -54,13 +53,7 @@ router.put('/', require('../middlewares/validate.mdw')(userSchema), async functi
                 "error": "Learner role must be 2",
             });
         } else {
-            user.password = bcrypt.hashSync(user.password, 10);
-            user.user_id = uuidv4();
-            user.created_at = Date.now();
-            user.state = 'ENABLED';
-            await userModel.add(user);
-
-            delete user.password;
+            await userService.createUser(user);
 
             res.status(201).json({
                 "data": user
@@ -81,13 +74,8 @@ router.put('/teachers'
     , async function (req, res) {
         try {
             const user = { ...req.body };
-            user.password = bcrypt.hashSync(user.password, 10);
-            user.user_id = uuidv4();
-            user.created_at = Date.now();
-            user.state = 'ENABLED';
-            await userModel.add(user);
 
-            delete user.password;
+            await userService.createUser(user);
 
             res.status(201).json({
                 "data": user

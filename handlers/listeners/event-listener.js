@@ -1,5 +1,6 @@
 // Import events module
 var events = require('events');
+const mailService = require('../../services/mail.service')
 // Create an eventEmitter object
 var eventEmitter = new events.EventEmitter();
 
@@ -21,6 +22,11 @@ eventEmitter.addListener('COURSE_REGISTED', async (log) => {
 eventEmitter.addListener('COURSE_REVIEW_ADDED', async (review) => {
     const res = await courseService.increaseReviewCountByOne(review.course_id, review.rating);
     console.log("COURSE_REVIEW_ADDED increaseReviewCountByOne", res);
+})
+
+eventEmitter.addListener('USER_REGISTED', async (user, otp) => {
+    await mailService.sendRegistationOTPEmail(user, otp);
+    console.log("USER_REGISTED", user);
 })
 
 module.exports = eventEmitter;

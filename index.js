@@ -52,6 +52,9 @@ app.use('/api/lessons', authMdw, require('./routes/lesson.route'));
 app.use('/api/chapters', authMdw, require('./routes/chapter.route'));
 
 app.use('/api/dev', require('./middlewares/auth.v2.mdw')(0), require('./routes/dev.route'));
+
+app.use('/api/otp', require('./routes/otp.route'));
+
 // Sets server port and logs message on success
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
 

@@ -159,5 +159,5 @@ router.patch("/:id/state"
             });
         }
     })
-    
+
 module.exports = router;

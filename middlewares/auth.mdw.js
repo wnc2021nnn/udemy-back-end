@@ -10,6 +10,10 @@ module.exports = function (req, res, next) {
         return res.status(403).json({
           message: 'Account is deleted/disabled'
         });
+      } else if (!decoded.email_verified) {
+        return res.status(403).json({
+          message: 'Please verify your email address'
+        });
       } else {
         req.accessTokenPayload = decoded;
         next();
