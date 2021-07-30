@@ -58,11 +58,11 @@ const createViewCourseDetailsButtonsTemplate = (course) => ({
             "elements": [
                 {
                     "title": course.title,
-                    "image_url": "https://i.picsum.photos/id/941/200/300.jpg?hmac=tSztWslp5Hm2jEg1UjAvvVNsaDT3dsPAEZ5lQ_yhNKA",
+                    "image_url": course.avatar ?? "",
                     "subtitle": course.description,
                     "default_action": {
                         "type": "web_url",
-                        "url": "https://wnc2021be.herokuapp.com/",
+                        "url": `https://wnc2021-udemy-fe.herokuapp.com/courses/${course.course_id}/`,
                         "webview_height_ratio": "FULL"
                     },
                 },
