@@ -116,8 +116,8 @@ module.exports = {
         return result;
     },
 
-    async searchCourse(query, page, limit) {
-        const listCourse = await courseModel.searchCourse(query, page, limit);
+    async searchCourse(query, page, limit, sortBy, sortDir) {
+        const listCourse = await courseModel.searchCourse(query, page, limit, sortBy, sortDir);
         const result = {
             'data': listCourse,
             'pagination': {

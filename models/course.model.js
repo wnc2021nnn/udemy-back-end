@@ -113,7 +113,8 @@ module.exports = {
                 topic_id: topicId
             })
             .innerJoin('user', 'course.lecturers_id', 'user.user_id')
-            .orderBy('registed_count', 'desc').limit(limit);
+            .orderBy('registed_count', 'desc')
+            .limit(limit);
     },
 
     getDetailCouresById(courseId) {
@@ -174,24 +175,26 @@ module.exports = {
             );
     },
 
-    searchCourse(query, page, limit) {
+    searchCourse(query, page, limit, sortBy, sortDir) {
         //return db(TBL_COURSE).where('title', 'like', `%${query}%`);
 
+        var builder = db(TBL_COURSE)
+            .select(courseSelectFields)
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+            .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
+            .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`);
+
+        if (sortBy && sortDir) {
+            builder = builder.orderBy(sortBy, sortDir);
+        }
+
         if (page && limit) {
-            return db(TBL_COURSE)
-                .select(courseSelectFields)
-                .innerJoin('user', 'course.lecturers_id', 'user.user_id')
-                .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
-                .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`)
+            builder = builder
                 .limit(limit)
                 .offset((page - 1) * limit);
-        } else {
-            return db(TBL_COURSE)
-                .select(courseSelectFields)
-                .innerJoin('user', 'course.lecturers_id', 'user.user_id')
-                .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
-                .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`)
         }
+
+        return builder;
     },
 
     updateTsv() {

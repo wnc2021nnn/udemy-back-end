@@ -11,6 +11,8 @@ router.get("/", async (req, res) => {
     const sort = req.query.sort;
     const limit = req.query.limit;
     const page = req.query.page;
+    const sortBy = req.query.sort_by;
+    const sortDir = req.query.sort_dir;
 
     var listCourse = [];
     var pagination = {};
@@ -24,7 +26,7 @@ router.get("/", async (req, res) => {
                 const lc = await couresModel.getCourseByTopic(topicId);
                 pagination.total_courses = lc.length;
             } else if (query) {
-                const result = await courseService.searchCourse(query, page, limit);
+                const result = await courseService.searchCourse(query, page, limit, sortBy, sortDir);
                 listCourse = result.data;
                 pagination = result.pagination;
             } else {
@@ -52,7 +54,7 @@ router.get("/", async (req, res) => {
         });
     } catch (error) {
         console.log(error)
-        res.status(403).json({error});
+        res.status(403).json({ error });
     }
 })
 
