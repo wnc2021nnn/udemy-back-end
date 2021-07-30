@@ -174,14 +174,24 @@ module.exports = {
             );
     },
 
-    searchCourse(query) {
+    searchCourse(query, page, limit) {
         //return db(TBL_COURSE).where('title', 'like', `%${query}%`);
 
-        return db(TBL_COURSE)
-            .select(courseSelectFields)
-            .innerJoin('user', 'course.lecturers_id', 'user.user_id')
-            .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
-            .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`)
+        if (page && limit) {
+            return db(TBL_COURSE)
+                .select(courseSelectFields)
+                .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+                .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
+                .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`)
+                .limit(limit)
+                .offset((page - 1) * limit);
+        } else {
+            return db(TBL_COURSE)
+                .select(courseSelectFields)
+                .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+                .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
+                .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`)
+        }
     },
 
     updateTsv() {

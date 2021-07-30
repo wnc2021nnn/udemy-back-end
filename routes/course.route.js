@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     const page = req.query.page;
 
     var listCourse = [];
-    const pagination = {};
+    var pagination = {};
 
     try {
         if (sort && sort === 'view_from_last_week_des') {
@@ -24,7 +24,9 @@ router.get("/", async (req, res) => {
                 const lc = await couresModel.getCourseByTopic(topicId);
                 pagination.total_courses = lc.length;
             } else if (query) {
-                listCourse = await couresModel.searchCourse(query);
+                const result = await courseService.searchCourse(query, page, limit);
+                listCourse = result.data;
+                pagination = result.pagination;
             } else {
                 listCourse = await couresModel.getAll();
             }

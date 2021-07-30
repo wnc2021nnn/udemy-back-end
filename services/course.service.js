@@ -114,5 +114,23 @@ module.exports = {
     async updateACourse(courseId, course) {
         const result = await courseModel.updateCourse(courseId, course);
         return result;
+    },
+
+    async searchCourse(query, page, limit) {
+        const listCourse = await courseModel.searchCourse(query, page, limit);
+        const result = {
+            'data': listCourse,
+            'pagination': {
+                'total_courses': listCourse.length,
+            }
+        }
+
+        if (page && limit) {
+            const length = (await courseModel.searchCourse(query)).length;
+            result.pagination = {
+                'total_courses': length,
+            }
+        }
+        return result;
     }
 }
