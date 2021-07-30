@@ -25,7 +25,7 @@ async function handleMessage(senderPsid, receivedMessage) {
         if (courseList.length > 0) {
             for (let i = 0; i < courseList.length; i += CHUNK) {
                 const chunkCourseList = courseList.slice(i, i + CHUNK);
-                response = createCoursesButtonsTemplate(`Cac khoa hoc lien quan: ${receivedMessage.text}`, chunkCourseList);
+                response = createCoursesButtonsTemplate(`Related courses: ${receivedMessage.text}`, chunkCourseList);
                 callSendAPI(senderPsid, response);
                 console.log("Response of search: " + JSON.stringify(response));
             }
@@ -78,7 +78,7 @@ async function handlePostback(senderPsid, receivedPostback) {
     switch (payload) {
         // Search button
         case 'SEARCH_COURSES_BUTTON':
-            response = { 'text': 'Nhập từ khóa để tìm kiếm' };
+            response = { 'text': 'Type a keyword to search' };
             break;
         // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
@@ -86,7 +86,7 @@ async function handlePostback(senderPsid, receivedPostback) {
             if (listCategory.length > 0) {
                 for (let i = 0; i < listCategory.length; i += CHUNK) {
                     const categoriesChunk = listCategory.slice(i, i + CHUNK);
-                    response = createCategoryButtonsTemplate('Chọn category', categoriesChunk);
+                    response = createCategoryButtonsTemplate('Select category', categoriesChunk);
                     console.log("List of category: " + JSON.stringify(response));
                     callSendAPI(senderPsid, response);
                 }

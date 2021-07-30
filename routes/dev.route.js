@@ -3,6 +3,39 @@ const courseModel = require('../models/course.model');
 
 const router = express.Router();
 
+const courseRM = require('../models/course-reviews.model')
+
+router.post('/calculate-reviews', async (req, res) => {
+    try {
+        const courses = await courseModel.getAll();
+
+        for (const course of courses) {
+            const courseId = course.course_id;
+
+            const reviews = await courseRM.getReviewsByCourseId(courseId);
+
+            const newRatingTotal = reviews.length;
+           
+            if (newRatingTotal > 0) {
+                const newRating = (reviews.reduce((a, b) => ({ rating: a.rating + b.rating }))).rating / newRatingTotal;
+
+                console.log(courseId, newRatingTotal, newRating)
+                await courseModel.updateCourse(courseId, {
+                    'rating_total': newRatingTotal,
+                    'rating': newRating,
+                });
+            }
+        }
+
+        res.json({
+            "status": true
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+
 router.post('/fix-course-table', async (req, res) => {
     try {
         const courses = await courseModel.getAll();
