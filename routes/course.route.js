@@ -11,42 +11,51 @@ router.get("/", async (req, res) => {
     const sort = req.query.sort;
     const limit = req.query.limit;
     const page = req.query.page;
+    const sortBy = req.query.sort_by;
+    const sortDir = req.query.sort_dir;
 
     var listCourse = [];
-    const pagination = {};
+    var pagination = {};
 
-    if (sort && sort === 'view_from_last_week_des') {
-        listCourse = await courseService.coursesViewedDesFromLastWeek();
-    } else {
-        if (topicId) {
-            listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
-            const lc = await couresModel.getCourseByTopic(topicId);
-            pagination.total_courses = lc.length;
-        } else if (query) {
-            listCourse = await couresModel.searchCourse(query);
+    try {
+        if (sort && sort === 'view_from_last_week_des') {
+            listCourse = await courseService.coursesViewedDesFromLastWeek();
         } else {
-            listCourse = await couresModel.getAll();
+            if (topicId) {
+                listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
+                const lc = await couresModel.getCourseByTopic(topicId);
+                pagination.total_courses = lc.length;
+            } else if (query) {
+                const result = await courseService.searchCourse(query, page, limit, sortBy, sortDir);
+                listCourse = result.data;
+                pagination = result.pagination;
+            } else {
+                listCourse = await couresModel.getAll();
+            }
+
+            if (sort && sort === 'view_des') {
+                listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
+            }
+
+            if (sort && sort === 'created_date_des') {
+                listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
+            }
+
+            if (limit && limit > 0) {
+                listCourse = listCourse.slice(0, limit);
+            }
         }
 
-        if (sort && sort === 'view_des') {
-            listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
-        }
-
-        if (sort && sort === 'created_date_des') {
-            listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
-        }
-
-        if (limit && limit > 0) {
-            listCourse = listCourse.slice(0, limit);
-        }
+        res.json({
+            "status": "success",
+            "meta": req.query,
+            "pagination": pagination,
+            "data": listCourse
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(403).json({ error });
     }
-
-    res.json({
-        "status": "success",
-        "meta": req.query,
-        "pagination": pagination,
-        "data": listCourse
-    });
 })
 
 router.get("/my-courses", require('../middlewares/auth.mdw'), async (req, res) => {

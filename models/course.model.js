@@ -1,5 +1,14 @@
+const { default: knex } = require('knex');
 const db = require('../utils/db');
 const TBL_COURSE = 'course'
+
+const courseSelectFields = [
+    `${TBL_COURSE}.*`,
+    'user.user_id as lecturer_id',
+    'user.first_name as lecturer_first_name',
+    'user.last_name as lecturer_last_name',
+    'topic.title as topic_name',
+];
 
 module.exports = {
     courseByTeacher(teacherId, courseId) {
@@ -104,20 +113,13 @@ module.exports = {
                 topic_id: topicId
             })
             .innerJoin('user', 'course.lecturers_id', 'user.user_id')
-            .orderBy('registed_count', 'desc').limit(limit);
+            .orderBy('registed_count', 'desc')
+            .limit(limit);
     },
 
     getDetailCouresById(courseId) {
         return db(TBL_COURSE)
-            .select(
-                [
-                    `${TBL_COURSE}.*`,
-                    'user.user_id as lecturer_id',
-                    'user.first_name as lecturer_first_name',
-                    'user.last_name as lecturer_last_name',
-                    'topic.title as topic_name',
-                ]
-            )
+            .select(courseSelectFields)
             .where({
                 course_id: courseId
             })
@@ -173,8 +175,26 @@ module.exports = {
             );
     },
 
-    async searchCourse(query) {
-        return db(TBL_COURSE).where('title', 'like', `%${query}%`);
+    searchCourse(query, page, limit, sortBy, sortDir) {
+        //return db(TBL_COURSE).where('title', 'like', `%${query}%`);
+
+        var builder = db(TBL_COURSE)
+            .select(courseSelectFields)
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+            .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
+            .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`);
+
+        if (sortBy && sortDir) {
+            builder = builder.orderBy(sortBy, sortDir);
+        }
+
+        if (page && limit) {
+            builder = builder
+                .limit(limit)
+                .offset((page - 1) * limit);
+        }
+
+        return builder;
     },
 
     updateTsv() {
