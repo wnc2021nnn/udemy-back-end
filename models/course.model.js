@@ -175,6 +175,14 @@ module.exports = {
 
     async searchCourse(query) {
         return db(TBL_COURSE).where('title', 'like', `%${query}%`);
+    },
+
+    updateTsv() {
+        return db(TBL_COURSE)
+            .where('updated_at', '<', Date.now())
+            .update({
+                'updated_at': Date.now()
+            });
     }
 }
 

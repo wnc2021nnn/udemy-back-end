@@ -86,4 +86,18 @@ router.post('/mark-enabled', async (req, res) => {
 
 })
 
+router.post('/tsv', async (req, res) => {
+    try {
+        const result = await courseModel.updateTsv();
+        res.json({
+            "status": true,
+            "data": result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
+    }
+
+})
+
 module.exports = router;

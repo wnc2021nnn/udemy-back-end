@@ -3,7 +3,10 @@ const bcrypt = require('bcrypt');
 const courseModel = require("../models/course.model");
 const userModel = require("../models/user.model");
 const otpService = require("./otp.service");
-const eventEmitter = require('../handlers/listeners/event-listener')
+const eventEmitter = require('../handlers/listeners/event-listener');
+const env = require("../config/env");
+const jwt = require('jsonwebtoken');
+const randomstring = require('randomstring');
 
 module.exports = {
     async createUser(user) {
@@ -14,6 +17,25 @@ module.exports = {
         await userModel.add(user);
 
         delete user.password;
+
+        //Create token
+        const payload = {
+            user_id: user.user_id,
+            role: user.role,
+            state: user.state,
+            email_verified: false,
+        }
+        const opts = {
+            expiresIn: env.JWT_EXPIRES_IN // seconds
+        }
+        const accessToken = jwt.sign(payload, env.JWT_SECRET_KEY, opts);
+
+        const refreshToken = randomstring.generate(80);
+        await userModel.patchRFToken(user.user_id, refreshToken);
+        user['refresh_token'] = refreshToken;
+        user['access_token'] = accessToken;
+
+        //Send OTP
 
         const otp = await otpService.createOtp();
 
