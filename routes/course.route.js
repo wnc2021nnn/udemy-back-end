@@ -15,38 +15,43 @@ router.get("/", async (req, res) => {
     var listCourse = [];
     const pagination = {};
 
-    if (sort && sort === 'view_from_last_week_des') {
-        listCourse = await courseService.coursesViewedDesFromLastWeek();
-    } else {
-        if (topicId) {
-            listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
-            const lc = await couresModel.getCourseByTopic(topicId);
-            pagination.total_courses = lc.length;
-        } else if (query) {
-            listCourse = await couresModel.searchCourse(query);
+    try {
+        if (sort && sort === 'view_from_last_week_des') {
+            listCourse = await courseService.coursesViewedDesFromLastWeek();
         } else {
-            listCourse = await couresModel.getAll();
+            if (topicId) {
+                listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
+                const lc = await couresModel.getCourseByTopic(topicId);
+                pagination.total_courses = lc.length;
+            } else if (query) {
+                listCourse = await couresModel.searchCourse(query);
+            } else {
+                listCourse = await couresModel.getAll();
+            }
+
+            if (sort && sort === 'view_des') {
+                listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
+            }
+
+            if (sort && sort === 'created_date_des') {
+                listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
+            }
+
+            if (limit && limit > 0) {
+                listCourse = listCourse.slice(0, limit);
+            }
         }
 
-        if (sort && sort === 'view_des') {
-            listCourse = listCourse.sort((a, b) => b.view_count - a.view_count);
-        }
-
-        if (sort && sort === 'created_date_des') {
-            listCourse = listCourse.sort((a, b) => b.created_at - a.created_at);
-        }
-
-        if (limit && limit > 0) {
-            listCourse = listCourse.slice(0, limit);
-        }
+        res.json({
+            "status": "success",
+            "meta": req.query,
+            "pagination": pagination,
+            "data": listCourse
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(403).json({error});
     }
-
-    res.json({
-        "status": "success",
-        "meta": req.query,
-        "pagination": pagination,
-        "data": listCourse
-    });
 })
 
 router.get("/my-courses", require('../middlewares/auth.mdw'), async (req, res) => {

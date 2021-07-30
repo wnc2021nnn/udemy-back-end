@@ -1,5 +1,14 @@
+const { default: knex } = require('knex');
 const db = require('../utils/db');
 const TBL_COURSE = 'course'
+
+const courseSelectFields = [
+    `${TBL_COURSE}.*`,
+    'user.user_id as lecturer_id',
+    'user.first_name as lecturer_first_name',
+    'user.last_name as lecturer_last_name',
+    'topic.title as topic_name',
+];
 
 module.exports = {
     courseByTeacher(teacherId, courseId) {
@@ -109,15 +118,7 @@ module.exports = {
 
     getDetailCouresById(courseId) {
         return db(TBL_COURSE)
-            .select(
-                [
-                    `${TBL_COURSE}.*`,
-                    'user.user_id as lecturer_id',
-                    'user.first_name as lecturer_first_name',
-                    'user.last_name as lecturer_last_name',
-                    'topic.title as topic_name',
-                ]
-            )
+            .select(courseSelectFields)
             .where({
                 course_id: courseId
             })
@@ -173,8 +174,14 @@ module.exports = {
             );
     },
 
-    async searchCourse(query) {
-        return db(TBL_COURSE).where('title', 'like', `%${query}%`);
+    searchCourse(query) {
+        //return db(TBL_COURSE).where('title', 'like', `%${query}%`);
+
+        return db(TBL_COURSE)
+            .select(courseSelectFields)
+            .innerJoin('user', 'course.lecturers_id', 'user.user_id')
+            .innerJoin('topic', 'course.topic_id', 'topic.topic_id')
+            .whereRaw(`(tsv @@ plainto_tsquery('${query}'))`)
     },
 
     updateTsv() {
