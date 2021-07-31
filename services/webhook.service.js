@@ -25,13 +25,13 @@ async function handleMessage(senderPsid, receivedMessage) {
         if (courseList.length > 0) {
             for (let i = 0; i < courseList.length; i += CHUNK) {
                 const chunkCourseList = courseList.slice(i, i + CHUNK);
-                response = createCoursesButtonsTemplate(`Related courses: ${receivedMessage.text}`, chunkCourseList);
+                response = createCoursesButtonsTemplate(`Các khóa học liên quan đến: ${receivedMessage.text}`, chunkCourseList);
                 callSendAPI(senderPsid, response);
                 console.log("Response of search: " + JSON.stringify(response));
             }
             return;
         }
-        else response = { "text": "Not found any result, please try another keyword!" }
+        else response = { "text": "Không có khóa học nào, vui lòng thử lại!" }
     } else if (receivedMessage.attachments) {
 
         // Get the URL of the message attachment
@@ -78,7 +78,7 @@ async function handlePostback(senderPsid, receivedPostback) {
     switch (payload) {
         // Search button
         case 'SEARCH_COURSES_BUTTON':
-            response = { 'text': 'Type a keyword to search' };
+            response = { 'text': 'Nhập tên khóa học hoặc lĩnh vực để tìm kiếm khóa học' };
             break;
         // View list of category 
         case 'VIEW_COURSES_BY_CATEGORY_BUTTON':
@@ -86,13 +86,13 @@ async function handlePostback(senderPsid, receivedPostback) {
             if (listCategory.length > 0) {
                 for (let i = 0; i < listCategory.length; i += CHUNK) {
                     const categoriesChunk = listCategory.slice(i, i + CHUNK);
-                    response = createCategoryButtonsTemplate('Select category', categoriesChunk);
+                    response = createCategoryButtonsTemplate('Chọn lĩnh vực', categoriesChunk);
                     console.log("List of category: " + JSON.stringify(response));
                     callSendAPI(senderPsid, response);
                 }
                 return;
             }
-            else response = { "text": "Not found any result, please try again!" };
+            else response = { "text": "Không có khóa học nào, vui lòng thử lại!" };
             break;
         default:
             // View list course of topic
@@ -109,7 +109,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                     }
                     return;
                 }
-                else response = { "text": "Not found any result, please try again!" };
+                else response = { "text": "Không có khóa học nào, vui lòng thử lại!" };
             } else
                 // View detail of course
                 if (payload.includes('COURSE_ITEM_ID_')) {
@@ -140,7 +140,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                             }
                             return;
                         }
-                        else response = { "text": "Not found any result, please try again!" };
+                        else response = { "text": "Không có khóa học nào, vui lòng thử lại!" };
                     }
     }
     // Send the message to acknowledge the postback
