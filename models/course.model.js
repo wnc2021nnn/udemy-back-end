@@ -18,12 +18,6 @@ module.exports = {
         })
     },
 
-    coursesByTeacher(teacherId) {
-        return db(TBL_COURSE).where({
-            lecturers_id: teacherId,
-        })
-    },
-
     createCourse(course) {
         return db(TBL_COURSE).insert(course);
     },
@@ -37,29 +31,47 @@ module.exports = {
     },
 
     getCouresByTeacherId(teacherId) {
+        const conditions = {
+            'lecturers_id': teacherId
+        }
+        
         return db(TBL_COURSE)
             .select(courseSelectFields)
-            .where(
-                'lecturers_id', teacherId
-            )
+            .where(conditions)
             .innerJoin('user', 'course.lecturers_id', 'user.user_id')
             .innerJoin('topic', 'course.topic_id', 'topic.topic_id');
     },
 
-    getAll() {
+    getAll(teacherId, showDisabledCourses = false) {
+        const conditions = {};
+
+        if (teacherId) {
+            conditions['course.lecturers_id'] = teacherId;
+        }
+
+        if (!showDisabledCourses) {
+            conditions['course.state'] = 'ENABLED';
+        };
+
         return db(TBL_COURSE)
             .select(courseSelectFields)
+            .where(conditions)
             .innerJoin('user', 'course.lecturers_id', 'user.user_id')
             .innerJoin('topic', 'course.topic_id', 'topic.topic_id');
     },
 
-    getCourseByTopic(topicId, page, limit) {
+    getCourseByTopic(topicId, page, limit, showDisabledCourses = false) {
+        const conditions = {
+            'course.topic_id': topicId,
+        };
+
+        if (!showDisabledCourses) {
+            conditions['course.state'] = 'ENABLED';
+        };
+
         let builder = db(TBL_COURSE)
             .select(courseSelectFields)
-            .where({
-                'course.topic_id': topicId,
-                'course.state': 'ENABLED',
-            })
+            .where(conditions)
             .innerJoin('user', 'course.lecturers_id', 'user.user_id')
             .innerJoin('topic', 'course.topic_id', 'topic.topic_id');
 

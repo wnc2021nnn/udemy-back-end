@@ -5,7 +5,7 @@ const courseService = require('../services/course.service');
 const getAccessTokenPayload = require('../utils/get-access-token-payload')
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", require('../middlewares/extract.token.if.exist') (), async (req, res) => {
     const topicId = req.query.topic;
     const query = req.query.search;
     const sort = req.query.sort;
@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
     const page = req.query.page;
     const sortBy = req.query.sort_by;
     const sortDir = req.query.sort_dir;
+    const teacherId = req.query.teacher_id;
 
     var listCourse = [];
     var pagination = {};
@@ -22,15 +23,15 @@ router.get("/", async (req, res) => {
             listCourse = await courseService.coursesViewedDesFromLastWeek();
         } else {
             if (topicId) {
-                listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
-                const lc = await couresModel.getCourseByTopic(topicId);
+                listCourse = await couresModel.getCourseByTopic(topicId, page, limit, req.showDisabledCourses);
+                const lc = await couresModel.getCourseByTopic(topicId, undefined, undefined, req.showDisabledCourses);
                 pagination.total_courses = lc.length;
             } else if (query) {
                 const result = await courseService.searchCourse(query, page, limit, sortBy, sortDir);
                 listCourse = result.data;
                 pagination = result.pagination;
             } else {
-                listCourse = await couresModel.getAll();
+                listCourse = await couresModel.getAll(teacherId, req.showDisabledCourses);
             }
 
             if (sort && sort === 'view_des') {
@@ -97,7 +98,7 @@ router.get("/:id/related-courses", async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(403).json({error});
+        res.status(403).json({ error });
     }
 })
 
