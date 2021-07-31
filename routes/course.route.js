@@ -5,7 +5,7 @@ const courseService = require('../services/course.service');
 const getAccessTokenPayload = require('../utils/get-access-token-payload')
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", require('../middlewares/extract.token.if.exist') (), async (req, res) => {
     const topicId = req.query.topic;
     const query = req.query.search;
     const sort = req.query.sort;
@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
     const page = req.query.page;
     const sortBy = req.query.sort_by;
     const sortDir = req.query.sort_dir;
+    const teacherId = req.query.teacher_id;
 
     var listCourse = [];
     var pagination = {};
@@ -22,15 +23,15 @@ router.get("/", async (req, res) => {
             listCourse = await courseService.coursesViewedDesFromLastWeek();
         } else {
             if (topicId) {
-                listCourse = await couresModel.getCourseByTopic(topicId, page, limit);
-                const lc = await couresModel.getCourseByTopic(topicId);
+                listCourse = await couresModel.getCourseByTopic(topicId, page, limit, req.showDisabledCourses);
+                const lc = await couresModel.getCourseByTopic(topicId, undefined, undefined, req.showDisabledCourses);
                 pagination.total_courses = lc.length;
             } else if (query) {
                 const result = await courseService.searchCourse(query, page, limit, sortBy, sortDir);
                 listCourse = result.data;
                 pagination = result.pagination;
             } else {
-                listCourse = await couresModel.getAll();
+                listCourse = await couresModel.getAll(teacherId, req.showDisabledCourses);
             }
 
             if (sort && sort === 'view_des') {
@@ -77,22 +78,27 @@ router.get("/:id", async (req, res) => {
 })
 
 router.get("/:id/related-courses", async (req, res) => {
-    const courseId = req.params.id;
-    const limit = req.query.limit ?? 6;
-    const sort = req.query.sort;
-    const course = (await couresModel.getDetailCouresById(courseId))[0];
-    if (course && sort === 'registed_des') {
-        const courses = await courseModel.getTopRegistedCoursesByTopic(course.topic_id, limit);
-        res.json({
-            "status": "success",
-            "meta": {
-                "params": req.params,
-                "query": req.query,
-            },
-            "data": courses ?? null
-        });
-    } else {
-        res.status(204).send();
+    try {
+        const courseId = req.params.id;
+        const limit = req.query.limit ?? 6;
+        const sort = req.query.sort;
+        const course = (await couresModel.getDetailCouresById(courseId))[0];
+        if (course && sort === 'registed_des') {
+            const courses = await courseModel.getTopRegistedCoursesByTopic(course.topic_id, limit);
+            res.json({
+                "status": "success",
+                "meta": {
+                    "params": req.params,
+                    "query": req.query,
+                },
+                "data": courses ?? null
+            });
+        } else {
+            res.status(204).send();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error });
     }
 })
 
