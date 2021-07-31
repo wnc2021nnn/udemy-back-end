@@ -77,22 +77,27 @@ router.get("/:id", async (req, res) => {
 })
 
 router.get("/:id/related-courses", async (req, res) => {
-    const courseId = req.params.id;
-    const limit = req.query.limit ?? 6;
-    const sort = req.query.sort;
-    const course = (await couresModel.getDetailCouresById(courseId))[0];
-    if (course && sort === 'registed_des') {
-        const courses = await courseModel.getTopRegistedCoursesByTopic(course.topic_id, limit);
-        res.json({
-            "status": "success",
-            "meta": {
-                "params": req.params,
-                "query": req.query,
-            },
-            "data": courses ?? null
-        });
-    } else {
-        res.status(204).send();
+    try {
+        const courseId = req.params.id;
+        const limit = req.query.limit ?? 6;
+        const sort = req.query.sort;
+        const course = (await couresModel.getDetailCouresById(courseId))[0];
+        if (course && sort === 'registed_des') {
+            const courses = await courseModel.getTopRegistedCoursesByTopic(course.topic_id, limit);
+            res.json({
+                "status": "success",
+                "meta": {
+                    "params": req.params,
+                    "query": req.query,
+                },
+                "data": courses ?? null
+            });
+        } else {
+            res.status(204).send();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({error});
     }
 })
 
