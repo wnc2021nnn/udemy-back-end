@@ -91,7 +91,6 @@ router.put('/teachers'
 
 const pUserSchema = require('../schemas/patch-user.json');
 const userService = require('../services/user.service');
-const { route } = require('./course.route');
 router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('../middlewares/auth.mdw'), async function (req, res) {
     try {
         const userId = req.accessTokenPayload.user_id;
@@ -130,6 +129,26 @@ router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('
         res.status(400).send({
             "meta": req.body,
             "data": ex
+        });
+    }
+
+})
+
+router.patch('/:id', require('../middlewares/auth.v2.mdw')(0), async function (req, res) {
+    try {
+        const userId = req.params.id;
+        const user = req.body;
+
+        await userModel.patchUser(userId, user);
+
+        res.status(201).json({
+            //"meta": req.body,
+            "data": "ok"
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            error
         });
     }
 
