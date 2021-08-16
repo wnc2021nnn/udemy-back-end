@@ -42,10 +42,18 @@ router.post('/', require('../middlewares/validate.mdw')(signInSchema), async fun
   user['refresh_token'] = refreshToken;
   user['access_token'] = accessToken;
 
-  return res.json({
-    "status": true,
-    "data": user,
-  })
+  if (user.state === 'DISABLED') {
+    return res.status(403).json({
+      "status": true,
+      "data": user,
+      "error": "Account is disabled"
+    })
+  } else {
+    return res.json({
+      "status": true,
+      "data": user,
+    })
+  }
 })
 
 const rfSchema = require('../schemas/refresh-token.json')
