@@ -104,20 +104,27 @@ router.patch('/', require('../middlewares/validate.mdw')(pUserSchema), require('
 
         if (req.body.old_password && req.body.password) {
             if (!bcrypt.compareSync(req.body.old_password, user.password)) {
-                return res.json({
-                    status: false
+                return res.status(403).json({
+                    status: false,
+                    'error': 'Wrong password'
                 });
             }
             user.password = bcrypt.hashSync(req.body.password, 10);
 
-            await userModel.patchPassword(userId, user.password);
+            //await userModel.patchPassword(userId, user.password);
         }
 
         if (req.body.first_name && req.body.last_name) {
-            await userModel.patchUsername(userId, req.body.first_name, req.body.last_name);
+            //await userModel.patchUsername(userId, req.body.first_name, req.body.last_name);
             user['first_name'] = req.body.first_name;
             user['last_name'] = req.body.last_name;
         }
+
+        if(req.body.email){
+            user['email'] = req.body.email;
+        }
+
+        await userModel.patchUser(userId, user);
 
         delete user.password;
 
