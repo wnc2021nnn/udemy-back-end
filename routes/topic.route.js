@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
 
     if (sort && sort === 'register_des') {
         listTopic = await topicService.topicRegistedTimesDesFrom(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        listTopic = listTopic.slice(0, 5);
     } else if (categoryId) {
         listTopic = await topicModel.getTopicByCateId(categoryId);
     } else {
