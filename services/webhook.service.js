@@ -119,12 +119,12 @@ async function handlePostback(senderPsid, receivedPostback) {
 
                     const textRP = {
                         "text": `
-                    ${course.title}
-                    Topic: ${course.topic_name}
-                    Teacher: ${course.lecturer_first_name} ${course.lecturer_last_name}
-                    Rating: ${course.rating}
-                    Price: ${course.price}
-                    Short description: ${course.short_description}
+                    Tên khóa học: ${course.title}
+                    Danh mục: ${course.topic_name}
+                    Giáo viên: ${course.lecturer_first_name} ${course.lecturer_last_name}
+                    Đánh giá: ${course.rating}*
+                    Giá: ${course.price}
+                    Mô tả ngắn: ${course.short_description}
                     ` }
 
                     console.log('textRP', textRP.text.length);
