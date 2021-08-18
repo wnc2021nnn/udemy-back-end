@@ -117,7 +117,15 @@ async function handlePostback(senderPsid, receivedPostback) {
                     const course = (await courseModel.getDetailCouresById(course_id))[0];
                     console.log("Course id: " + course_id);
 
-                    //callSendAPI(senderPsid, textRP);
+                    const textRP = `${course.title}
+                    Topic: ${course.topic_name}
+                    Teacher: ${course.lecturer_first_name} ${course.lecturer_last_name}
+                    Rating: ${course.rating}
+                    Price: ${course.price}
+                    Short description: ${course.short_description}
+                    `;
+
+                    callSendAPI(senderPsid, textRP);
 
                     response = createViewCourseDetailsButtonsTemplate(course);
 
