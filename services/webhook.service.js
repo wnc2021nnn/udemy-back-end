@@ -27,7 +27,6 @@ async function handleMessage(senderPsid, receivedMessage) {
                 const chunkCourseList = courseList.slice(i, i + CHUNK);
                 response = createCoursesButtonsTemplate(`Các khóa học liên quan đến: ${receivedMessage.text}`, chunkCourseList);
                 callSendAPI(senderPsid, response);
-                console.log("Response of search: " + JSON.stringify(response));
             }
             return;
         }
@@ -87,7 +86,6 @@ async function handlePostback(senderPsid, receivedPostback) {
                 for (let i = 0; i < listCategory.length; i += CHUNK) {
                     const categoriesChunk = listCategory.slice(i, i + CHUNK);
                     response = createCategoryButtonsTemplate('Chọn lĩnh vực', categoriesChunk);
-                    console.log("List of category: " + JSON.stringify(response));
                     callSendAPI(senderPsid, response);
                 }
                 return;
@@ -104,7 +102,6 @@ async function handlePostback(senderPsid, receivedPostback) {
                     for (let i = 0; i < listCourse.length; i += CHUNK) {
                         const listChunkCourse = listCourse.slice(i, i + CHUNK);
                         response = createCoursesButtonsTemplate(topicItem.title, listChunkCourse);
-                        console.log("Response of get course of topic: " + JSON.stringify(response));
                         callSendAPI(senderPsid, response);
                     }
                     return;
@@ -115,15 +112,16 @@ async function handlePostback(senderPsid, receivedPostback) {
                 if (payload.includes('COURSE_ITEM_ID_')) {
                     const course_id = payload.substring(15, payload.length);
                     const course = (await courseModel.getDetailCouresById(course_id))[0];
-                    console.log("Course id: " + course_id);
 
-                    const textRP = `${course.title}
-                    Topic: ${course.topic_name}
-                    Teacher: ${course.lecturer_first_name} ${course.lecturer_last_name}
-                    Rating: ${course.rating}
-                    Price: ${course.price}
-                    Short description: ${course.short_description}
-                    `;
+                    const textRP = {
+                        "text": `
+                    Tên khóa học: ${course.title}
+                    Danh mục: ${course.topic_name}
+                    Giáo viên: ${course.lecturer_first_name} ${course.lecturer_last_name}
+                    Đánh giá: ${course.rating}*
+                    Giá: ${course.price}
+                    Mô tả ngắn: ${course.short_description}
+                    ` }
 
                     callSendAPI(senderPsid, textRP);
 
@@ -134,16 +132,16 @@ async function handlePostback(senderPsid, receivedPostback) {
                     // View list of topic base on category
                     if (payload.includes('CATEGORY_ITEM_ID_')) {
                         const categoryId = payload.substring(17, payload.length);
-                        console.log('categoryId', categoryId);
+                        
                         const categoryItem = (await categoryModel.getCategoryById(categoryId))[0];
-                        console.log('categoryItem', categoryItem);
+                        
                         const listTopic = await topicModel.getTopicByCateId(categoryId);
-                        console.log('listTopic', listTopic);
+                        
                         if (listTopic.length > 0 && categoryItem) {
                             for (let i = 0; i < listTopic.length; i += CHUNK) {
                                 const listChunkTopic = listTopic.slice(i, i + CHUNK);
                                 response = createTopicsButtonsTemplate(categoryItem.title, listChunkTopic);
-                                console.log("Response of get topic of category: " + JSON.stringify(response));
+                                
                                 callSendAPI(senderPsid, response);
                             }
                             return;
@@ -174,7 +172,7 @@ function callSendAPI(senderPsid, response) {
         'json': requestBody
     }, (err, _res, _body) => {
         if (!err) {
-            console.log('Message sent!');
+            console.log('Message sent!\n');
         } else {
             console.error('Unable to send message:' + err);
         }
