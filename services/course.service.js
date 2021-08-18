@@ -8,7 +8,7 @@ const lessonLearningStateModel = require('../models/lesson-learning-state.model'
 const { v4 } = require('uuid');
 
 module.exports = {
-    async coursesViewedDesFromLastWeek(limit = 4) {
+    async coursesViewedDesFromLastWeek(limit = 3) {
         const lastWeek = Date.now() - 7 * 24 * 60 * 60 * 1000;
         const coursesViewLog = await logModel.coursesViewedWithInCount(lastWeek);
         const limitedCoursesViewLog = coursesViewLog.slice(0, limit);
