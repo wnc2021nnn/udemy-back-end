@@ -117,13 +117,16 @@ async function handlePostback(senderPsid, receivedPostback) {
                     const course = (await courseModel.getDetailCouresById(course_id))[0];
                     console.log("Course id: " + course_id);
 
-                    const textRP = `${course.title}
+                    const textRP = {
+                        "text": `
+                    ${course.title}
                     Topic: ${course.topic_name}
                     Teacher: ${course.lecturer_first_name} ${course.lecturer_last_name}
                     Rating: ${course.rating}
                     Price: ${course.price}
                     Short description: ${course.short_description}
-                    `;
+                    ` }
+
                     console.log('textRP', textRP.length);
 
                     callSendAPI(senderPsid, textRP);
