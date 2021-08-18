@@ -127,7 +127,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                     Short description: ${course.short_description}
                     ` }
 
-                    console.log('textRP', textRP.length);
+                    console.log('textRP', textRP.text.length);
 
                     callSendAPI(senderPsid, textRP);
 
