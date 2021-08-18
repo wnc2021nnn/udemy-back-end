@@ -124,6 +124,7 @@ async function handlePostback(senderPsid, receivedPostback) {
                     Price: ${course.price}
                     Short description: ${course.short_description}
                     `;
+                    console.log('textRP', textRP.length);
 
                     callSendAPI(senderPsid, textRP);
 
@@ -174,7 +175,7 @@ function callSendAPI(senderPsid, response) {
         'json': requestBody
     }, (err, _res, _body) => {
         if (!err) {
-            console.log('Message sent!', response);
+            console.log('Message sent!\n', response);
         } else {
             console.error('Unable to send message:' + err);
         }
