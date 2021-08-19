@@ -113,17 +113,17 @@ async function handlePostback(senderPsid, receivedPostback) {
                     const course_id = payload.substring(15, payload.length);
                     const course = (await courseModel.getDetailCouresById(course_id))[0];
 
-                    // const textRP = {
-                    //     "text": `
-                    // Tên khóa học: ${course.title}
-                    // Danh mục: ${course.topic_name}
-                    // Giáo viên: ${course.lecturer_first_name} ${course.lecturer_last_name}
-                    // Đánh giá: ${course.rating}*
-                    // Giá: ${course.price}
-                    // Mô tả ngắn: ${course.short_description}
-                    // ` }
+                    const textRP = {
+                        "text": `
+                    Tên khóa học: ${course.title}
+                    Danh mục: ${course.topic_name}
+                    Giáo viên: ${course.lecturer_first_name} ${course.lecturer_last_name}
+                    Đánh giá: ${course.rating}*
+                    Giá: ${course.price}
+                    Mô tả ngắn: ${course.short_description}
+                    ` }
 
-                    // callSendAPI(senderPsid, textRP);
+                    callSendAPI(senderPsid, textRP);
 
                     response = createViewCourseDetailsButtonsTemplate(course);
 
